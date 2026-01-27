@@ -11,7 +11,7 @@ MLX_A		=	$(MLX_DIR)/libmlx.a
 
 MAIN		=	main.c exit.c
 PARSING		=	parse.c
-UTILS		=	free.c
+UTILS		=	free.c ft_str.c
 
 NAME		=	cub3d
 

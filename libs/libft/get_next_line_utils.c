@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 18:58:27 by zaleksan          #+#    #+#             */
-/*   Updated: 2025/05/09 13:18:07 by zaleksan         ###   ########.fr       */
+/*   Updated: 2026/01/27 18:32:21 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,6 @@ size_t	ft_strlen_gnl(const char *src)
 	while (src[len] != '\0')
 		len++;
 	return (len);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	size_t			i;
-
-	i = 0;
-	if (!s)
-		return (NULL);
-	while (s[i] != '\0')
-	{
-		if (s[i] == (unsigned char)c)
-			return ((char *)&s[i]);
-		i++;
-	}
-	if (s[i] == (unsigned char)c)
-		return ((char *)&s[i]);
-	return (0);
 }
 
 char	*ft_strjoin_gnl(char *s1, char *s2)

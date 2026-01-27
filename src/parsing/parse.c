@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:05 by pargev            #+#    #+#             */
-/*   Updated: 2026/01/26 22:38:28 by pargev           ###   ########.fr       */
+/*   Updated: 2026/01/27 18:45:43 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	config_lines_count(char *path)
 		line = get_next_line(fd);	
 		if (!line)
 			break ;
-		if (line[0] == '\n')
+		if (line[0] != '\n')
 			len++;
 		free(line);
 	}
@@ -120,7 +120,7 @@ t_color	*parse_color(char *color_text)
 	return (color);
 }
 
-void	parse_config2(char **config_text, t_config *config)
+char*	parse_config2(char **config_text, t_config *config)
 {
 	int		i;
 	char	*info;
@@ -156,6 +156,8 @@ void	parse_config2(char **config_text, t_config *config)
 				exit_with_error(": configuration contains incorrect color definition");
 			}
 		}
+		else if (ft_str_only(ft_strtrim(info, " \n"), "10NWES"))
+			return (info);
 		else
 		{
 			free_string_array(config_text);

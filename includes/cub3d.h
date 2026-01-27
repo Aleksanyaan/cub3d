@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:14 by pargev            #+#    #+#             */
-/*   Updated: 2026/01/26 22:35:42 by pargev           ###   ########.fr       */
+/*   Updated: 2026/01/27 18:30:12 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,6 @@ t_config	parse_config(char *config_path);
 // ========= utils =========
 
 void	free_string_array(char **string);
+int		ft_str_only(const char *s, const char *allowed);
 
 #endif
