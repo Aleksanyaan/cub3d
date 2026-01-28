@@ -9,9 +9,9 @@ MLX_DIR		=	libs/minilibx-linux
 LIBFT_A		=	$(LIBFT)libft.a
 MLX_A		=	$(MLX_DIR)/libmlx.a
 
-MAIN		=	main.c exit.c
+MAIN		=	main.c
 PARSING		=	parse.c
-UTILS		=	free.c ft_str.c
+UTILS		=	free.c ft_str.c exit.c
 
 NAME		=	cub3d
 

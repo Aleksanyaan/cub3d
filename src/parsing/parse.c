@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:05 by pargev            #+#    #+#             */
-/*   Updated: 2026/01/27 18:45:43 by pargev           ###   ########.fr       */
+/*   Updated: 2026/01/28 14:46:50 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ int	config_lines_count(char *path)
 		line = get_next_line(fd);	
 		if (!line)
 			break ;
-		if (line[0] != '\n')
-			len++;
+		len++;
 		free(line);
 	}
 	close(fd);
@@ -63,7 +62,7 @@ char	**read_config(char *path)
 	config = (char **)malloc(sizeof(char *) * (config_lines_count(path) + 1));
 	if (!config)
 		exit_with_error(strerror(errno));
-		fd = open(path, O_RDONLY);
+	fd = open(path, O_RDONLY);
 	if (fd < 0)
 		exit_with_error(strerror(errno));
 	i = 0;
@@ -72,10 +71,7 @@ char	**read_config(char *path)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		if (line[0] != '\n')
-			config[i++] = line;
-		else
-			free(line);
+		config[i++] = line;
 	}
 	config[i] = 0;
 	close(fd);
@@ -110,17 +106,46 @@ t_color	*parse_color(char *color_text)
 	while (color_matrix[len])
 		len++;
 	if (len != 3)
-		return (NULL);
+	{
+		free_string_array(color_matrix);
+		return (free(color_text), NULL);
+	}
 	color = (t_color *)malloc(sizeof(t_color));
 	if (!parse_color2(color_matrix[0], &color->red, 0, 255) || !parse_color2(color_matrix[1], &color->green, 0, 255) || !parse_color2(color_matrix[2], &color->blue, 0, 255))
 	{
 		free(color);
-		return (NULL);
+		free_string_array(color_matrix);
+		return (free(color_text), NULL);
 	}
-	return (color);
+	free_string_array(color_matrix);
+	return (free(color_text), color);
 }
 
-char*	parse_config2(char **config_text, t_config *config)
+char	**parse_map(char **config_text, int start)
+{
+	int		len;
+	char	**map;
+	int		i;
+
+	len = start;
+	while (config_text[len])
+		len++;
+	map = (char **)ft_calloc(sizeof(char *), len + 1);
+	i = 0;
+	while (config_text[start + i])
+	{
+		if (config_text[start + i][0] == '\n' || !ft_str_only(config_text[start + i], " \n10NWES"))
+		{
+			free_string_array(map);
+			return (NULL);
+		}
+		map[i] = ft_strdup_free(ft_strtrim(config_text[start + i], "\n"));
+		i++;
+	}
+	return (map);
+}
+
+int	parse_config(char **config_text, t_config *config)
 {
 	int		i;
 	char	*info;
@@ -129,7 +154,7 @@ char*	parse_config2(char **config_text, t_config *config)
 	while (config_text[i])
 	{
 		info = config_text[i];
-		if (config_text[0] == 0);
+		if (info[0] == '\n');
 		else if (ft_strnstr(info, "NO", 2) == info)
 			config->north_texture = ft_strtrim(info + 2, " \n");
 		else if (ft_strnstr(info, "SO", 2) == info)
@@ -139,35 +164,48 @@ char*	parse_config2(char **config_text, t_config *config)
 		else if (ft_strnstr(info, "EA", 2) == info)
 			config->east_texture = ft_strtrim(info + 2, " \n");
 		else if (ft_strnstr(info, "F", 1) == info)
-		{
 			config->floor_color = parse_color(ft_strtrim(info + 1, " \n"));
-			if (config->floor_color == NULL)
-			{
-				free_string_array(config_text);
-				exit_with_error(": configuration contains incorrect color definition");
-			}
-		}
 		else if (ft_strnstr(info, "C", 1) == info)
-		{
 			config->ceiling_color = parse_color(ft_strtrim(info + 1, " \n"));
-			if (config->ceiling_color == NULL)
-			{
-				free_string_array(config_text);
-				exit_with_error(": configuration contains incorrect color definition");
-			}
-		}
-		else if (ft_str_only(ft_strtrim(info, " \n"), "10NWES"))
-			return (info);
-		else
+		else if (ft_str_only(info, " \n10NWES"))
 		{
-			free_string_array(config_text);
-			exit_with_error(": configuration contains an invalid identifier");
+			config->map = parse_map(config_text, i);
+			break ;
 		}
+		else
+			return (1);
 		i++;
 	}
+	return (0);
 }
 
-t_config	parse_config(char *path)
+int	check_map(char **map)
+{
+	if (!map)
+		return (1);
+	return (0);
+}
+
+void	cheack_config(t_config *config)
+{
+	if (!config->north_texture)
+		free_config_and_exit(config, NULL, ": <north texture> is missing or invalid");
+	if (!config->south_texture)
+		free_config_and_exit(config, NULL, ": <south texture> is missing or invalid");
+	if (!config->west_texture)
+		free_config_and_exit(config, NULL, ": <west texture> is missing or invalid");
+	if (!config->east_texture)
+		free_config_and_exit(config, NULL, ": <east texture> is missing or invalid");
+	if (!config->floor_color)
+		free_config_and_exit(config, NULL, ": <floor color> is missing or invalid");
+	if (!config->ceiling_color)
+		free_config_and_exit(config, NULL, ": <ceiling color> is missing or invalid");
+	if (check_map(config->map))
+		free_config_and_exit(config, NULL, ": <map> is missing> or invalid");
+}
+
+
+t_config	parse(char *path)
 {
 	char		**config_text;
 	t_config	config;
@@ -175,7 +213,11 @@ t_config	parse_config(char *path)
 	if (!check_file_extension(path, "cub"))
 		exit_with_error(": configuration's extension must be .cub");
 	config_text = read_config(path);
-	parse_config2(config_text, &config);
+	if (parse_config(config_text, &config))
+	{
+		free_config_and_exit(&config, config_text, ": configuration contains an invalid identifier");
+	}
 	free_string_array(config_text);
+	cheack_config(&config);
 	return (config);
 }
