@@ -1,55 +1,54 @@
-NAME		= cub3d
+CC			=	cc
+FLAGS		=	-fsanitize=address -g -Wall -Wextra -Werror
 
-LIBFT_DIR	= libs/libft
+OBJ_DIR		=	src/obj
+INCLUDES	=	includes/
+LIBFT_DIR	=	libs/libft
+MLX_DIR		=	libs/minilibx-linux
 
-LIBFT		= -L./$(LIBFT_DIR) -lft
+LIBFT_A		=	$(LIBFT)libft.a
+MLX_A		=	$(MLX_DIR)/libmlx.a
 
-MLX_DIR		= libs/minilibx-linux
+MAIN		=	main.c
+PARSING		=	parse.c parse_color.c check_config.c read_file.c
+UTILS		=	free.c ft_str.c exit.c
 
-MLX			= -L./$(MLX_DIR) -lmlx -lm -lX11 -lXext
+NAME		=	cub3d
 
-INCLUDES	= -I./includes -I./$(LIBFT_DIR) -I./$(MLX_DIR)
+HEADERS		=	${INCLUDES}/cub3d.h
+SRC			=	$(addprefix src/main/, $(MAIN)) \
+				$(addprefix src/parsing/, $(PARSING)) \
+				$(addprefix src/utils/, $(UTILS))
+OBJ			=	$(addprefix $(OBJ_DIR)/, $(SRC:src/%.c=%.o))
 
-HEADER		= ./includes/cub3d.h
-
-CC			= cc
-
-FLAGS		= -Wall -Wextra -Werror
+LIBFT		=	-L./$(LIBFT_DIR) -lft
+MLX			=	-L./$(MLX_DIR) -lmlx -lm -lX11 -lXext
+IFLAGS		=	-I./$(INCLUDES) -I./$(LIBFT_DIR) #-I./$(MLX_DIR)
 
 SRC_DIR		= ./src
 
-SRC			= ${SRC_DIR}/main.c
+all: $(NAME)
 
-OBJ			= $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRC))
+$(OBJ_DIR)/%.o: src/%.c ${HEADERS}
+				@mkdir -p $(dir $@)
+				${CC} ${FLAGS} ${IFLAGS} -c $< -o $@
 
-BUILD_DIR	= ./build
+$(NAME): 		$(OBJ) $(LIBFT_A) Makefile
+				$(CC) $(FLAGS) $(OBJ) $(IFLAGS) $(LIBFT) -o $(NAME)
 
-all: build lib minilibx $(NAME)
+${LIBFT_A}:
+				@make -s -C $(LIBFT_DIR)
 
-$(BUILD_DIR)/%.o:	$(SRC_DIR)/%.c Makefile $(HEADER)
-	$(CC) $(FLAGS) $(INCLUDES) -c $< -o $@
-
-$(NAME): $(OBJ) $(LIBFT_DIR)/libft.a $(MLX_DIR)/libmlx.a Makefile
-	$(CC) $(FLAGS) $(INCLUDES) $(OBJ) -o $(NAME) $(LIBFT) $(MLX)
-
-lib:
-	make -C $(LIBFT_DIR)
-
-minilibx:
-	make -C $(MLX_DIR)
-
-build:
-	mkdir -p ${BUILD_DIR}
+${MLX_A}:
+				@make -s -C $(MLX_DIR)
 
 clean:
-	rm -rf $(BUILD_DIR)
-	make -C $(MLX_DIR) clean
-	make -C $(LIBFT_DIR) clean
+				rm -rf ${OBJ_DIR}
+				@make -s -C $(LIBFT_DIR) fclean
 
-fclean: clean
-	rm -f $(NAME)
-	make -C $(LIBFT_DIR) fclean
+fclean:			clean
+				rm -f $(NAME)
 
-re: fclean all
+re:				fclean all
 
-.PHONY:	all fclean clean re lib build minilibx
+.PHONY:			all fclean clean re lib build minilibx
