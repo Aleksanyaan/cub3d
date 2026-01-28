@@ -1,5 +1,5 @@
 CC			=	cc
-FLAGS		=	-fsanitize=address -g #-Wall -Wextra -Werror
+FLAGS		=	-fsanitize=address -g -Wall -Wextra -Werror
 
 OBJ_DIR		=	src/obj
 INCLUDES	=	includes/
@@ -10,7 +10,7 @@ LIBFT_A		=	$(LIBFT)libft.a
 MLX_A		=	$(MLX_DIR)/libmlx.a
 
 MAIN		=	main.c
-PARSING		=	parse.c
+PARSING		=	parse.c parse_color.c check_config.c read_file.c
 UTILS		=	free.c ft_str.c exit.c
 
 NAME		=	cub3d

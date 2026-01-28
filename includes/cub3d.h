@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:14 by pargev            #+#    #+#             */
-/*   Updated: 2026/01/28 14:27:43 by pargev           ###   ########.fr       */
+/*   Updated: 2026/01/28 20:16:32 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,19 @@ typedef struct s_config
 	char	**map;
 }	t_config;
 
-
-// =========== Main ============
-
 // ========== Parsing ==========
-
 t_config	parse(char *config_path);
+void		cheack_config(t_config *config);
+int			check_file_extension(char *path, char *extension);
+t_color		*parse_color(char *color_text);
+char		**read_config(char *path);
 
 // ========= utils =========
-
-void	exit_with_error(char *error_message);
-void	free_config_and_exit(t_config *config, char **string, char *error_message);
-void	free_string_array(char **string);
-void	free_config(t_config *config);
-int		ft_str_only(const char *s, const char *allowed);
-char	*ft_strdup_free(char *s1);
+void		exit_with_error(char *error_message);
+void		free_and_exit(t_config *config, char **string, char *error_message);
+void		free_string_array(char **string);
+void		free_config(t_config *config);
+int			ft_str_only(const char *s, const char *allowed);
+char		*ft_strdup_free(char *s1);
 
 #endif
