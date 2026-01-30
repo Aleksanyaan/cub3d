@@ -1,13 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/30 16:02:01 by zaleksan          #+#    #+#             */
+/*   Updated: 2026/01/30 16:04:24 by zaleksan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/cub3d.h"
 
-int	close_window()
+int	close_window(void)
 {
 	exit(0);
 }
 
-char **get_map(void)
+char	**get_map(void)
 {
-	static char *map[] = {
+	static char	*map[] =
+	{
 		"11111111111111111111",
 		"10000000000000000001",
 		"10111111111111111001",
@@ -21,7 +34,6 @@ char **get_map(void)
 		"11111111111111111111",
 		NULL
 	};
-
 	return (map);
 }
 
@@ -32,6 +44,7 @@ void	init_game(t_game *game)
 	game->mlx = mlx_init();
 	game->win = mlx_new_window(game->mlx, WIDTH, HEIGHT, "Cube3D");
 	game->img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
-	game->data = mlx_get_data_addr(game->img, &game->bpp, &game->size_line, &game->endian);
+	game->data = mlx_get_data_addr(game->img, &game->bpp, &game->size_line,
+			&game->endian);
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 }

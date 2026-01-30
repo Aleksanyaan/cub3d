@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:14 by pargev            #+#    #+#             */
-/*   Updated: 2026/01/30 15:51:09 by zaleksan         ###   ########.fr       */
+/*   Updated: 2026/01/30 15:55:47 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,12 @@
 # include "../libs/minilibx-linux/mlx.h"
 # include <errno.h>
 # include <math.h>
-# include <stdbool.h>
 # include <stdio.h>
 # include <string.h>
 # include <unistd.h>
 
-# define WIDTH 2000
-# define HEIGHT 1000
+# define WIDTH 1280
+# define HEIGHT 720
 # define ESC 65307
 # define W 119
 # define A 97
@@ -58,13 +57,13 @@ typedef struct s_player
 	float		y;
 	float		angle;
 
-	bool		key_up;
-	bool		key_down;
-	bool		key_left;
-	bool		key_right;
+	int		key_up;
+	int		key_down;
+	int		key_left;
+	int		key_right;
 
-	bool		left_rotate;
-	bool		right_rotate;
+	int		left_rotate;
+	int		right_rotate;
 
 }				t_player;
 
