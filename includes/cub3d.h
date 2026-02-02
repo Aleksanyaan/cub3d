@@ -6,20 +6,20 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:14 by pargev            #+#    #+#             */
-/*   Updated: 2026/01/30 15:55:47 by zaleksan         ###   ########.fr       */
+/*   Updated: 2026/02/02 19:34:39 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include "libft.h"
 # include "../libs/minilibx-linux/mlx.h"
+# include "libft.h"
+# include <unistd.h>
 # include <errno.h>
 # include <math.h>
 # include <stdio.h>
 # include <string.h>
-# include <unistd.h>
 
 # define WIDTH 1280
 # define HEIGHT 720
@@ -32,6 +32,8 @@
 # define BLOCK_SIZE 64
 # define LEFT 65361
 # define RIGHT 65363
+# define PLAYER_RADIUS 4
+# define MOVE_SPEED 3
 
 typedef struct s_color
 {
@@ -57,13 +59,13 @@ typedef struct s_player
 	float		y;
 	float		angle;
 
-	int		key_up;
-	int		key_down;
-	int		key_left;
-	int		key_right;
+	int			key_up;
+	int			key_down;
+	int			key_left;
+	int			key_right;
 
-	int		left_rotate;
-	int		right_rotate;
+	int			left_rotate;
+	int			right_rotate;
 
 }				t_player;
 
@@ -101,7 +103,7 @@ char			*ft_strdup_free(char *s1);
 void			init_player(t_player *player);
 int				key_press(int keycode, t_player *player);
 int				key_release(int keycode, t_player *player);
-void			move_player(t_player *player);
+void			move_player(t_player *player, t_game *game);
 int				close_window(void);
 int				touch(float px, float py, t_game *game);
 float			fixed_dist(float x1, float y1, float x2, float y2,
@@ -113,5 +115,6 @@ void			draw_line(t_player *player, t_game *game, float start_x, int i);
 int				draw_loop(t_game *game);
 void			init_game(t_game *game);
 char			**get_map(void);
+int				is_wall(double x, double y, t_game *game);
 
 #endif

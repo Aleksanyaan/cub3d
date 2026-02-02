@@ -69,7 +69,7 @@ MLX_A		=	$(MLX_DIR)/libmlx.a
 MAIN		=	main.c
 PARSING		=	parse.c parse_color.c check_config.c read_file.c
 UTILS		=	free.c ft_str.c exit.c
-RENDER		=	distance.c draw.c init.c player.c
+RENDER		=	distance.c draw.c init.c player.c collision.c
 
 NAME		=	cub3d
 

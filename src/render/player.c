@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 15:58:45 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/01/30 16:01:41 by zaleksan         ###   ########.fr       */
+/*   Updated: 2026/02/02 19:32:57 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,34 +76,76 @@ void	rotate_palyer(t_player *player)
 		player->angle += 2 * PI;
 }
 
-void	move_player(t_player *player)
-{
-	int		speed;
-	float	cos_angle;
-	float	sin_angle;
+// void	move_player(t_player *player)
+// {
+// 	int		speed;
+// 	float	cos_angle;
+// 	float	sin_angle;
 
-	speed = 3;
+// 	speed = 3;
+// 	rotate_palyer(player);
+// 	cos_angle = cos(player->angle);
+// 	sin_angle = sin(player->angle);
+// 	if (player->key_up)
+// 	{
+// 		player->x += cos_angle * speed;
+// 		player->y += sin_angle * speed;
+// 	}
+// 	if (player->key_down)
+// 	{
+// 		player->x -= cos_angle * speed;
+// 		player->y -= sin_angle * speed;
+// 	}
+// 	if (player->key_right)
+// 	{
+// 		player->x += -sin_angle * speed;
+// 		player->y += cos_angle * speed;
+// 	}
+// 	if (player->key_left)
+// 	{
+// 		player->x += sin_angle * speed;
+// 		player->y += -cos_angle * speed;
+// 	}
+// }
+void	move_player(t_player *player, t_game *game)
+{
+	double	new_x;
+	double	new_y;
+	double	cos_angle;
+	double	sin_angle;
+
 	rotate_palyer(player);
 	cos_angle = cos(player->angle);
 	sin_angle = sin(player->angle);
+	new_x = player->x;
+	new_y = player->y;
+
 	if (player->key_up)
 	{
-		player->x += cos_angle * speed;
-		player->y += sin_angle * speed;
+		new_x += cos_angle * MOVE_SPEED;
+		new_y += sin_angle * MOVE_SPEED;
 	}
 	if (player->key_down)
 	{
-		player->x -= cos_angle * speed;
-		player->y -= sin_angle * speed;
+		new_x -= cos_angle * MOVE_SPEED;
+		new_y -= sin_angle * MOVE_SPEED;
 	}
 	if (player->key_right)
 	{
-		player->x += -sin_angle * speed;
-		player->y += cos_angle * speed;
+		new_x += -sin_angle * MOVE_SPEED;
+		new_y += cos_angle * MOVE_SPEED;
 	}
 	if (player->key_left)
 	{
-		player->x += sin_angle * speed;
-		player->y += -cos_angle * speed;
+		new_x += sin_angle * MOVE_SPEED;
+		new_y += -cos_angle * MOVE_SPEED;
 	}
+
+	if (!is_wall(new_x + PLAYER_RADIUS, player->y, game)
+		&& !is_wall(new_x - PLAYER_RADIUS, player->y, game))
+		player->x = new_x;
+
+	if (!is_wall(player->x, new_y + PLAYER_RADIUS, game)
+		&& !is_wall(player->x, new_y - PLAYER_RADIUS, game))
+		player->y = new_y;
 }
