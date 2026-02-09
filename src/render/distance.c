@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 16:05:21 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/02/02 19:32:44 by zaleksan         ###   ########.fr       */
+/*   Updated: 2026/02/05 20:25:02 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ float	fixed_dist(float x1, float y1, float x2, float y2, t_game *game)
 
 	delta_x = x2 - x1;
 	delta_y = y2 - y1;
-	angle = atan2(delta_y, delta_x) - game->player.angle;
+	angle = atan2(delta_y, delta_x) - game->player->angle;
 	fix_dist = distance(delta_x, delta_y) * cos(angle);
 	return (fix_dist);
 }

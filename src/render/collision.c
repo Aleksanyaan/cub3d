@@ -13,3 +13,4 @@ int	is_wall(double x, double y, t_game *game)
 		return (1);
 	return (game->map[map_y][map_x] == '1');
 }
+

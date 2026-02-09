@@ -56,7 +56,7 @@
 # .PHONY:			all fclean clean re lib build minilibx
 
 CC			=	cc
-FLAGS		=	-fsanitize=address -g -Wall -Wextra -Werror
+FLAGS		=	-Wall -Wextra -Werror -fsanitize=address -g 
 
 OBJ_DIR		=	src/obj
 INCLUDES	=	includes
@@ -69,7 +69,7 @@ MLX_A		=	$(MLX_DIR)/libmlx.a
 MAIN		=	main.c
 PARSING		=	parse.c parse_color.c check_config.c read_file.c
 UTILS		=	free.c ft_str.c exit.c
-RENDER		=	distance.c draw.c init.c player.c collision.c
+RENDER		=	distance.c draw.c init.c player.c collision.c free.c
 
 NAME		=	cub3d
 

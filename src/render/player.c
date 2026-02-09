@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 15:58:45 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/02/02 19:32:57 by zaleksan         ###   ########.fr       */
+/*   Updated: 2026/02/07 19:06:07 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	init_player(t_player *player)
 	player->right_rotate = 0;
 }
 
-int	key_press(int keycode, t_player *player)
+int	key_press(int keycode, t_player *player, t_game *game)
 {
 	if (keycode == W)
 		player->key_up = 1;
@@ -40,7 +40,7 @@ int	key_press(int keycode, t_player *player)
 	if (keycode == RIGHT)
 		player->right_rotate = 1;
 	if (keycode == ESC)
-		close_window();
+		close_window(game);
 	return (0);
 }
 
