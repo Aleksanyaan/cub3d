@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 16:05:16 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/02/07 19:06:25 by zaleksan         ###   ########.fr       */
+/*   Updated: 2026/02/10 20:44:57 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,22 +113,20 @@ void	draw_line(t_player *player, t_game *game, float start_x, int i)
 
 int	draw_loop(t_game *game)
 {
-	t_player	*player;
 	float		fraction;
 	float		start_x;
 	int			i;
 
-	player = game->player;
 	ft_bzero(game->data, HEIGHT * game->size_line);
-	move_player(player, game);
+	move_player(game->player, game);
 	// draw_square(player->x, player->y, 15, 0x00FF00, game);
 	// draw_map(game);
 	fraction = PI / 3 / WIDTH;
-	start_x = player->angle - PI / 6;
+	start_x = game->player->angle - PI / 6;
 	i = 0;
 	while (i < WIDTH)
 	{
-		draw_line(player, game, start_x, i);
+		draw_line(game->player, game, start_x, i);
 		start_x += fraction;
 		i++;
 	}

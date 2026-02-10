@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 15:58:45 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/02/07 19:06:07 by zaleksan         ###   ########.fr       */
+/*   Updated: 2026/02/10 20:46:51 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,39 +25,39 @@ void	init_player(t_player *player)
 	player->right_rotate = 0;
 }
 
-int	key_press(int keycode, t_player *player, t_game *game)
+int	key_press(int keycode, t_game *game)
 {
 	if (keycode == W)
-		player->key_up = 1;
+		game->player->key_up = 1;
 	if (keycode == A)
-		player->key_left = 1;
+		game->player->key_left = 1;
 	if (keycode == S)
-		player->key_down = 1;
+		game->player->key_down = 1;
 	if (keycode == D)
-		player->key_right = 1;
+		game->player->key_right = 1;
 	if (keycode == LEFT)
-		player->left_rotate = 1;
+		game->player->left_rotate = 1;
 	if (keycode == RIGHT)
-		player->right_rotate = 1;
+		game->player->right_rotate = 1;
 	if (keycode == ESC)
 		close_window(game);
 	return (0);
 }
 
-int	key_release(int keycode, t_player *player)
+int	key_release(int keycode, t_game *game)
 {
 	if (keycode == W)
-		player->key_up = 0;
+		game->player->key_up = 0;
 	if (keycode == A)
-		player->key_left = 0;
+		game->player->key_left = 0;
 	if (keycode == S)
-		player->key_down = 0;
+		game->player->key_down = 0;
 	if (keycode == D)
-		player->key_right = 0;
+		game->player->key_right = 0;
 	if (keycode == LEFT)
-		player->left_rotate = 0;
+		game->player->left_rotate = 0;
 	if (keycode == RIGHT)
-		player->right_rotate = 0;
+		game->player->right_rotate = 0;
 	return (0);
 }
 
@@ -76,37 +76,6 @@ void	rotate_palyer(t_player *player)
 		player->angle += 2 * PI;
 }
 
-// void	move_player(t_player *player)
-// {
-// 	int		speed;
-// 	float	cos_angle;
-// 	float	sin_angle;
-
-// 	speed = 3;
-// 	rotate_palyer(player);
-// 	cos_angle = cos(player->angle);
-// 	sin_angle = sin(player->angle);
-// 	if (player->key_up)
-// 	{
-// 		player->x += cos_angle * speed;
-// 		player->y += sin_angle * speed;
-// 	}
-// 	if (player->key_down)
-// 	{
-// 		player->x -= cos_angle * speed;
-// 		player->y -= sin_angle * speed;
-// 	}
-// 	if (player->key_right)
-// 	{
-// 		player->x += -sin_angle * speed;
-// 		player->y += cos_angle * speed;
-// 	}
-// 	if (player->key_left)
-// 	{
-// 		player->x += sin_angle * speed;
-// 		player->y += -cos_angle * speed;
-// 	}
-// }
 void	move_player(t_player *player, t_game *game)
 {
 	double	new_x;

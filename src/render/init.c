@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 16:02:01 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/02/07 18:59:09 by zaleksan         ###   ########.fr       */
+/*   Updated: 2026/02/10 20:50:30 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	close_window(t_game *game)
 	if (!game)
 		exit(1);
 	cleanup(game);
+    // free_map(game->map);
+	free_all(game);
 	exit(0);
 }
 
@@ -44,68 +46,39 @@ void	init_struct(t_game *game)
 	game->endian = 0;
 }
 
-// int	init_game(t_game *game)
-// {
-// 	init_struct(game);
-// 	game->player = malloc(sizeof(t_player));
-// 	if (!game->player)
-// 		return (1);
-// 	init_player(game->player);
-// 	game->map = get_map();
-// 	if (!game->map)
-// 		return (1);
-// 	game->mlx = mlx_init();
-// 	if (!game->mlx)
-// 		return (1);
-// 	game->win = mlx_new_window(game->mlx, WIDTH, HEIGHT, "Cube3D");
-// 	if (!game->win)
-// 		return (cleanup(game), 1);
-// 	game->img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
-// 	if (!game->img)
-// 		return (cleanup(game), 1);
-// 	game->data = mlx_get_data_addr(game->img, &game->bpp, &game->size_line,
-// 			&game->endian);
-// 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
-// 	return (0);
-// }
-
-int init_game(t_game *game)
+void init_game(t_game *game)
 {
-     // set all pointers to NULL
-
-    // allocate player
-    game->player = malloc(sizeof(t_player));
-    if (!game->player)
-    {
-        free_all(game);
+ 	game->player = malloc(sizeof(t_player));
+	if (!game->player)
 		exit(1);
-    }
+	init_player(game->player);
     init_struct(game);
-    init_player(game->player);
-
-    // load map
-    game->map = get_map();
-    if (!game->map)
-        return (1);
-
-    // initialize MLX
-    game->mlx = mlx_init();
-    if (!game->mlx)
-        return (1);
-
-    game->win = mlx_new_window(game->mlx, WIDTH, HEIGHT, "Cube3D");
-    if (!game->win)
-        return (cleanup(game), 1);
-
-    game->img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
-    if (!game->img)
-        return (cleanup(game), 1);
-
-    game->data = mlx_get_data_addr(game->img, &game->bpp, &game->size_line,
-                                   &game->endian);
-    mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
-
-    return (0);
+	game->map = get_map();
+	game->mlx = mlx_init();
+	if (!game->mlx)
+	{
+		free_all(game);
+		exit(1);
+	}
+	game->win = mlx_new_window(game->mlx, WIDTH, HEIGHT, "Cube3D");
+	if (!game->win)
+	{
+		free_all(game);
+		exit(1);
+	}
+	game->img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
+	if (!game->img)
+	{
+		free_all(game);
+		exit(1);
+	}
+	game->data = mlx_get_data_addr(game->img, &game->bpp, &game->size_line,
+			&game->endian);
+	if (!game->data)
+	{
+		free_all(game);
+		exit(1);
+	}
 }
 
 

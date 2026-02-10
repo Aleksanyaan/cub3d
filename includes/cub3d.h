@@ -6,7 +6,7 @@
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:14 by pargev            #+#    #+#             */
-/*   Updated: 2026/02/07 19:06:29 by zaleksan         ###   ########.fr       */
+/*   Updated: 2026/02/10 20:46:27 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 # include "../libs/minilibx-linux/mlx.h"
 # include "libft.h"
-# include <unistd.h>
 # include <errno.h>
 # include <math.h>
 # include <stdio.h>
 # include <string.h>
+# include <unistd.h>
 
 # define WIDTH 1280
 # define HEIGHT 720
@@ -101,8 +101,8 @@ char			*ft_strdup_free(char *s1);
 
 // ========= render =========
 void			init_player(t_player *player);
-int				key_press(int keycode, t_player *player, t_game *game);
-int				key_release(int keycode, t_player *player);
+int				key_press(int keycode, t_game *game);
+int				key_release(int keycode, t_game *game);
 void			move_player(t_player *player, t_game *game);
 int				close_window(t_game *game);
 int				touch(float px, float py, t_game *game);
@@ -113,12 +113,11 @@ void			draw_square(int x, int y, int size, int color, t_game *game);
 void			draw_map(t_game *game);
 void			draw_line(t_player *player, t_game *game, float start_x, int i);
 int				draw_loop(t_game *game);
-int				init_game(t_game *game);
+void				init_game(t_game *game);
 char			**get_map(void);
 int				is_wall(double x, double y, t_game *game);
-void			cleanup(t_game *game);
-void			init_struct(t_game *game);
 void			free_all(t_game *game);
-
+void			cleanup(t_game *game);
+void			free_map(char **map);
 
 #endif

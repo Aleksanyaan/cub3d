@@ -56,7 +56,7 @@
 # .PHONY:			all fclean clean re lib build minilibx
 
 CC			=	cc
-FLAGS		=	-Wall -Wextra -Werror -fsanitize=address -g 
+FLAGS		=	-g -Wall -Wextra -Werror #-fsanitize=address 
 
 OBJ_DIR		=	src/obj
 INCLUDES	=	includes
