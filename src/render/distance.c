@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   distance.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 16:05:21 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/02/10 20:40:28 by zaleksan         ###   ########.fr       */
+/*   Updated: 2026/02/21 14:15:36 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ int	touch(float px, float py, t_game *game)
 
 	x = px / BLOCK_SIZE;
 	y = py / BLOCK_SIZE;
-	if (x < 0 || y < 0 || !game->map[y] || !game->map[y][x])
+	if (x < 0 || y < 0 || !game->config.map[y] || !game->config.map[y][x])
 		return (1);
-	if (game->map[y][x] == '1')
+	if (game->config.map[y][x] == '1')
 		return (1);
 	return (0);
 }

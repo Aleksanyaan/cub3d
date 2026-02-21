@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:05 by pargev            #+#    #+#             */
-/*   Updated: 2026/01/28 14:26:36 by pargev           ###   ########.fr       */
+/*   Updated: 2026/02/21 14:33:49 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,19 @@ void	free_config(t_config *config)
 		free(config->ceiling_color);
 	if (config->map)
 		free_string_array(config->map);
+}
+
+void	free_all(t_game *game)
+{
+	if (!game)
+		return ;
+	if (game->img)
+		mlx_destroy_image(game->mlx, game->img);
+	if (game->win)
+		mlx_destroy_window(game->mlx, game->win);
+	if (game->mlx)
+		free(game->mlx);
+	free(game->player);
+	free_config(&game->config);
+	free(game);
 }

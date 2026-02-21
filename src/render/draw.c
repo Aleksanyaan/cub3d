@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 16:05:16 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/02/10 20:44:57 by zaleksan         ###   ########.fr       */
+/*   Updated: 2026/02/21 14:15:51 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	draw_map(t_game *game)
 	int		y;
 	int		x;
 
-	map = game->map;
+	map = game->config.map;
 	color = 0x0000FF;
 	x = 0;
 	y = 0;

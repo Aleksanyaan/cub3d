@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:14 by pargev            #+#    #+#             */
-/*   Updated: 2026/02/10 20:46:27 by zaleksan         ###   ########.fr       */
+/*   Updated: 2026/02/21 14:34:19 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ typedef struct s_game
 	int			bpp;
 	int			size_line;
 	int			endian;
-	char		**map;
+	t_config	config;
 }				t_game;
 
 // ========== Parsing ==========
@@ -98,6 +98,7 @@ void			free_string_array(char **string);
 void			free_config(t_config *config);
 int				ft_str_only(const char *s, const char *allowed);
 char			*ft_strdup_free(char *s1);
+void			free_all(t_game *game);
 
 // ========= render =========
 void			init_player(t_player *player);
@@ -113,11 +114,8 @@ void			draw_square(int x, int y, int size, int color, t_game *game);
 void			draw_map(t_game *game);
 void			draw_line(t_player *player, t_game *game, float start_x, int i);
 int				draw_loop(t_game *game);
-void				init_game(t_game *game);
+void			init_game(t_game *game, t_config config);
 char			**get_map(void);
 int				is_wall(double x, double y, t_game *game);
-void			free_all(t_game *game);
-void			cleanup(t_game *game);
-void			free_map(char **map);
 
 #endif

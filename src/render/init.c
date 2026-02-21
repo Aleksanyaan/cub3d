@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 16:02:01 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/02/10 20:50:30 by zaleksan         ###   ########.fr       */
+/*   Updated: 2026/02/21 14:32:26 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,8 @@ int	close_window(t_game *game)
 {
 	if (!game)
 		exit(1);
-	cleanup(game);
-    // free_map(game->map);
 	free_all(game);
 	exit(0);
-}
-
-char	**get_map(void)
-{
-	static char	*map[] = {"11111111111111111111", "10000000000000000001",
-			"10111111111111111001", "10000000000000001001",
-			"10001100000000001001", "100010000P0000100001",
-			"10001110000000001001", "10000000000000001001",
-			"10000000000001000001", "10000000000000000001",
-			"11111111111111111111", NULL};
-
-	return (map);
 }
 
 void	init_struct(t_game *game)
@@ -40,20 +26,19 @@ void	init_struct(t_game *game)
 	game->win = NULL;
 	game->img = NULL;
 	game->data = NULL;
-	game->map = NULL;
 	game->bpp = 0;
 	game->size_line = 0;
 	game->endian = 0;
 }
 
-void init_game(t_game *game)
+void init_game(t_game *game, t_config config)
 {
  	game->player = malloc(sizeof(t_player));
 	if (!game->player)
 		exit(1);
 	init_player(game->player);
     init_struct(game);
-	game->map = get_map();
+	game->config = config;
 	game->mlx = mlx_init();
 	if (!game->mlx)
 	{

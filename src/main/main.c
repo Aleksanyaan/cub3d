@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:10 by pargev            #+#    #+#             */
-/*   Updated: 2026/02/10 20:43:58 by zaleksan         ###   ########.fr       */
+/*   Updated: 2026/02/21 14:31:38 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,10 @@
 
 int	main(void)
 {
-	// t_config	config;
+	t_config	config;
 	t_game		*game;
-	// int			i;
 
-	// config = parse("/home/pargev/Desktop/cub3d/config.cub");
+	config = parse("/home/pargev/Desktop/cub3d/config.cub");
 	// printf("%s\n", config.north_texture);
 	// printf("%s\n", config.south_texture);
 	// printf("%s\n", config.west_texture);
@@ -34,15 +33,16 @@ int	main(void)
 	// 	printf("%s\n", config.map[i]);
 	// 	i++;
 	// }
+
+	
 	game = malloc(sizeof(t_game));
 	if (!game)
 		exit(1);
-	init_game(game);
+	init_game(game, config);
 	mlx_hook(game->win, 2, 1L << 0, key_press, game);
 	mlx_hook(game->win, 3, 1L << 1, key_release, game);
 	mlx_loop_hook(game->mlx, draw_loop, game);
 	mlx_loop(game->mlx);
 	free_all(game);
-	// free_config(&config);
 }
 
