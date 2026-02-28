@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:14 by pargev            #+#    #+#             */
-/*   Updated: 2026/02/28 23:47:16 by pargev           ###   ########.fr       */
+/*   Updated: 2026/03/01 00:26:07 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdio.h>
 # include <string.h>
 # include <unistd.h>
+# include <sys/time.h>
 
 # define WIDTH 1280
 # define HEIGHT 720

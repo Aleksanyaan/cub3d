@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 16:05:16 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/03/01 00:02:21 by pargev           ###   ########.fr       */
+/*   Updated: 2026/03/01 00:37:05 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void	draw_line2(t_game *game, int x, float dist)
 		y++;
 	}
 	wall_end = wall_start + height;
+	y = wall_start;
 	while (y < wall_end)
 	{
 		put_pixel(x, y, (t_color){0, 255, 0}, game);
@@ -129,8 +130,35 @@ void	draw_line(t_player *player, t_game *game, float start_x, int x)
 	draw_line2(game, x, dist);
 }
 
+long	current_time_ms(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+}
+
+void	draw_fps(t_game *game, long *last_time, int *frames)
+{
+	long	now_time;
+	char	*fps_str;
+
+	now_time = current_time_ms();
+	(*frames)++;
+	if (now_time - *last_time >= 1000)
+	{
+		fps_str = ft_itoa(*frames);
+		printf("FPS = %s\n", fps_str);
+		free(fps_str);
+		*frames = 0;
+		*last_time = now_time;
+	}
+}
+
 int	draw_loop(t_game *game)
 {
+	static long	last_time = 0;
+    static int	frames = 0;
 	float		fraction;
 	float		start_x;
 	int			i;
@@ -148,6 +176,7 @@ int	draw_loop(t_game *game)
 		start_x += fraction;
 		i++;
 	}
+	draw_fps(game, &last_time, &frames);
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 	return (0);
 }
