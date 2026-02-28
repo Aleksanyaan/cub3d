@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:14 by pargev            #+#    #+#             */
-/*   Updated: 2026/02/21 14:34:19 by pargev           ###   ########.fr       */
+/*   Updated: 2026/02/28 23:47:16 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,8 @@ int				close_window(t_game *game);
 int				touch(float px, float py, t_game *game);
 float			fixed_dist(float x1, float y1, float x2, float y2,
 					t_game *game);
-void			put_pixel(int x, int y, int color, t_game *game);
-void			draw_square(int x, int y, int size, int color, t_game *game);
+void			put_pixel(int x, int y, t_color color, t_game *game);
+void			draw_square(int x, int y, int size, t_color color, t_game *game);
 void			draw_map(t_game *game);
 void			draw_line(t_player *player, t_game *game, float start_x, int i);
 int				draw_loop(t_game *game);
