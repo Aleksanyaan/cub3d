@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:14 by pargev            #+#    #+#             */
-/*   Updated: 2026/03/01 00:26:07 by pargev           ###   ########.fr       */
+/*   Updated: 2026/03/14 22:33:10 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,14 @@ typedef struct s_game
 	int			endian;
 	t_config	config;
 }				t_game;
+
+typedef enum direction
+{
+	North,
+	South,
+	West,
+	East
+}	t_direction;
 
 // ========== Parsing ==========
 t_config		parse(char *config_path);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 15:58:45 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/02/10 20:46:51 by zaleksan         ###   ########.fr       */
+/*   Updated: 2026/03/14 22:45:22 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	init_player(t_player *player)
 {
 	player->x = WIDTH / 2;
 	player->y = HEIGHT / 2;
-	player->angle = PI / 2;
+	player->angle = 0;
 	player->key_up = 0;
 	player->key_down = 0;
 	player->key_left = 0;

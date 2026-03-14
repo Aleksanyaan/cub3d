@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 16:05:16 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/03/01 00:37:05 by pargev           ###   ########.fr       */
+/*   Updated: 2026/03/15 00:57:03 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,66 @@ void	draw_map(t_game *game)
 	}
 }
 
-void	draw_line2(t_game *game, int x, float dist)
+t_direction	all_direction(float angle, double px, double py)
+{
+	double			x;
+	double			y;
+	double		error;
+	t_direction directions[2];
+
+	// need change operator to math function
+	x = fmod(px, BLOCK_SIZE);
+	y = fmod(py, BLOCK_SIZE);
+	
+	// printf("angle = %f x = %f, y = %f\n", angle, x, y);
+	error = PI / 6;
+	
+	if (angle >= 0)
+	{
+		if (angle < PI/2)
+		{
+			if (x > y)
+				return (South);
+			else
+				return (East);
+		}
+		else if (angle < PI)
+		{
+			if (y > (double)BLOCK_SIZE - x)
+				return (West);
+			else
+				return (South);
+		}
+		else if (angle < 3 * PI / 2)
+		{
+			if ((double)BLOCK_SIZE - x > (double)BLOCK_SIZE - y)
+				return (North);
+			else
+				return (West);
+		}
+		else
+		{
+			if (x < (double)BLOCK_SIZE - y)
+				return (East);
+			else
+				return (North);
+		}
+	}
+	else
+	{
+		if (x < (double)BLOCK_SIZE - y)
+			return (East);
+		else
+			return (North);
+	}
+
+	if (y == 0 || y == BLOCK_SIZE - 1)
+		return (directions[0]);
+	return (directions[1]);
+}
+
+
+void	draw_line2(t_game *game, int x, float dist, t_color color)
 {
 	float	height;
 	int		y;
@@ -98,7 +157,7 @@ void	draw_line2(t_game *game, int x, float dist)
 	y = wall_start;
 	while (y < wall_end)
 	{
-		put_pixel(x, y, (t_color){0, 255, 0}, game);
+		put_pixel(x, y, color, game);
 		y++;
 	}
 	while (y < HEIGHT)
@@ -110,11 +169,12 @@ void	draw_line2(t_game *game, int x, float dist)
 
 void	draw_line(t_player *player, t_game *game, float start_x, int x)
 {
-	float	cos_angle;
-	float	sin_angle;
-	float	ray_x;
-	float	ray_y;
-	float	dist;
+	float		cos_angle;
+	float		sin_angle;
+	float		ray_x;
+	float		ray_y;
+	float		dist;
+	t_direction direction;
 
 	cos_angle = cos(start_x);
 	sin_angle = sin(start_x);
@@ -126,8 +186,19 @@ void	draw_line(t_player *player, t_game *game, float start_x, int x)
 		ray_x += cos_angle;
 		ray_y += sin_angle;
 	}
+	direction = all_direction(start_x, ray_x, ray_y);
+	t_color color;
+	if (direction == North)
+		color = (t_color){255, 0, 0};
+	else if (direction == South)
+		color = (t_color){0, 255, 0};
+	else if (direction == West)
+		color = (t_color){0, 0, 255};
+	else
+		color = (t_color){255, 255, 0};
+	// put_pixel(ray_x, ray_y, color, game);
 	dist = fixed_dist(player->x, player->y, ray_x, ray_y, game);
-	draw_line2(game, x, dist);
+	draw_line2(game, x, dist, color);
 }
 
 long	current_time_ms(void)
@@ -176,7 +247,8 @@ int	draw_loop(t_game *game)
 		start_x += fraction;
 		i++;
 	}
-	draw_fps(game, &last_time, &frames);
+	// draw_fps(game, &last_time, &frames);
+	// for (int i = 0; i < 10000000; i++);
 	mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 	return (0);
 }
