@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:10 by pargev            #+#    #+#             */
-/*   Updated: 2026/02/21 14:31:38 by pargev           ###   ########.fr       */
+/*   Updated: 2026/03/01 00:16:29 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	main(void)
 	t_config	config;
 	t_game		*game;
 
+	
 	config = parse("/home/pargev/Desktop/cub3d/config.cub");
 	// printf("%s\n", config.north_texture);
 	// printf("%s\n", config.south_texture);
@@ -34,13 +35,13 @@ int	main(void)
 	// 	i++;
 	// }
 
-	
 	game = malloc(sizeof(t_game));
 	if (!game)
-		exit(1);
+		free_and_exit(&config, NULL, "");
 	init_game(game, config);
 	mlx_hook(game->win, 2, 1L << 0, key_press, game);
 	mlx_hook(game->win, 3, 1L << 1, key_release, game);
+	// mlx_hook(game->win, 17, 0, close_window, game);
 	mlx_loop_hook(game->mlx, draw_loop, game);
 	mlx_loop(game->mlx);
 	free_all(game);
