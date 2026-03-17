@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:05 by pargev            #+#    #+#             */
-/*   Updated: 2026/02/28 23:35:49 by pargev           ###   ########.fr       */
+/*   Updated: 2026/03/17 23:18:54 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,31 @@ void	free_config(t_config *config)
 		free_string_array(config->map);
 }
 
+void	free_textures(t_game *game)
+{
+	if (game->north_texture.img)
+		mlx_destroy_image(game->mlx, game->north_texture.img);
+	if (game->south_texture.img)
+		mlx_destroy_image(game->mlx, game->south_texture.img);
+	if (game->west_texture.img)
+		mlx_destroy_image(game->mlx, game->west_texture.img);
+	if (game->east_texture.img)
+		mlx_destroy_image(game->mlx, game->east_texture.img);
+}
+
 void	free_all(t_game *game)
 {
 	if (!game)
 		return ;
+	free_textures(game);
 	if (game->img)
 		mlx_destroy_image(game->mlx, game->img);
 	if (game->win)
 		mlx_destroy_window(game->mlx, game->win);
 	if (game->mlx)
 		free(game->mlx);
-	free(game->player);
+	if (game->player)
+		free(game->player);
 	free_config(&game->config);
 	free(game);
 }

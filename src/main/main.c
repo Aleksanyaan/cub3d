@@ -6,24 +6,26 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:10 by pargev            #+#    #+#             */
-/*   Updated: 2026/03/01 00:16:29 by pargev           ###   ########.fr       */
+/*   Updated: 2026/03/18 00:01:23 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 
-int	main(void)
+int	main(int argc, char	**argv)
 {
 	t_config	config;
 	t_game		*game;
 
+	if (argc != 2)
+		return (1);
 	
-	config = parse("/home/pargev/Desktop/cub3d/config.cub");
-	// printf("%s\n", config.north_texture);
-	// printf("%s\n", config.south_texture);
-	// printf("%s\n", config.west_texture);
-	// printf("%s\n", config.east_texture);
+	config = parse(argv[1]);
+	printf("%s\n", config.north_texture);
+	printf("%s\n", config.south_texture);
+	printf("%s\n", config.west_texture);
+	printf("%s\n", config.east_texture);
 	// printf("%d,%d,%d\n", config.floor_color->red, config.floor_color->green,
 	// 	config.floor_color->blue);
 	// printf("%d,%d,%d\n", config.ceiling_color->red, config.ceiling_color->green,

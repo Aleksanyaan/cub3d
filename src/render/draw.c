@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 16:05:16 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/03/15 21:47:56 by pargev           ###   ########.fr       */
+/*   Updated: 2026/03/18 00:05:48 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,38 +160,24 @@ t_direction	check_adjacent(t_game *game, int x, int y, t_direction direction, in
 {
 	t_direction	new_direction;
 
+	if ((direction == West && quarter == 3) || (direction == East && quarter == 4))
+		new_direction = North;
+	else if ((direction == West && quarter == 2) || (direction == East && quarter == 1))
+		new_direction = South;
+	else if ((direction == North && quarter == 3) || (direction == South && quarter == 2))
+		new_direction = West;
+	else if ((direction == North && quarter == 4) || (direction == South && quarter == 1))
+		new_direction = East;
+
 	if (direction == North)
-	{
-		if (quarter == 3)
-			new_direction = West;
-		else
-			new_direction = East;
 		y++;
-	}
 	else if (direction == South)
-	{
-		if (quarter == 1)
-			new_direction = East;
-		else
-			new_direction = West;
 		y--;
-	}
 	else if (direction == West)
-	{
-		if (quarter == 2)
-			new_direction = South;
-		else
-			new_direction = North;
 		x++;
-	}
-	else
-	{
-		if (quarter == 1)
-			new_direction = South;
-		else
-			new_direction = North;
+	else if (direction == East)
 		x--;
-	}
+
 	if (game->config.map[y][x] == '1')
 		return (new_direction);
 	return (direction);
@@ -201,52 +187,30 @@ void	lines_intersection_point(float x1, float y1, float x2, float y2,
 								float px, float py, int quarter, int side,
 								float *x, float *y)
 {
-	float		angle;
-	float		dx;
-	float		dy;
+	float	angle;
+	float	dx;
+	float	dy;
 	float	u;
 	float	den;
 
 	angle = PI / 2;
-	if (quarter == 1)
-	{
-		if (side >= 0)
-			angle = 0;
-	}
-	else if (quarter == 2)
-	{
-		if (side < 0)
-			angle = 0;
-	}
-	else if (quarter == 3)
-	{
-		if (side >= 0)
-			angle = 0;
-	}
-	else
-	{
-		if (side < 0)
-			angle = 0;
-	}
-	
+	if ((quarter == 1 && side >= 0) || (quarter == 2 && side < 0) || (quarter == 3 && side >= 0) || (quarter == 4 && side < 0))
+		angle = 0;
+
 	dx = cos(angle);
 	dy = sin(angle);
-	den = den = (x2 - x1) * dy - (y2 - y1) * dx;
-	// printf("x1 %f y1 %f x2 %f y2 %f px %f py %f den %f quarter %d angle %f\n", x1, y1, x2, y2, px, py, den, quarter, angle);
+	den = (x2 - x1) * dy - (y2 - y1) * dx;
 	u = ((px - x1) * dy - (py - y1) * dx) / den;
 
     *x = x1 + u * (x2 - x1);
     *y = y1 + u * (y2 - y1);
 }
 
-void	draw_line2(t_game *game, int x, float dist, t_color color)
+void	draw_ceiling_floor(t_game *game, int x, float height)
 {
-	float	height;
 	int		y;
 	int		wall_start;
-	int		wall_end;
 
-	height = (BLOCK_SIZE / dist) * (WIDTH / 2);
 	y = 0;
 	wall_start = (HEIGHT - height) / 2;
 	while (y < wall_start)
@@ -254,18 +218,67 @@ void	draw_line2(t_game *game, int x, float dist, t_color color)
 		put_pixel(x, y, *game->config.ceiling_color, game);
 		y++;
 	}
-	wall_end = wall_start + height;
-	y = wall_start;
-	while (y < wall_end)
-	{
-		put_pixel(x, y, color, game);
-		y++;
-	}
+	y = wall_start + height;
 	while (y < HEIGHT)
 	{
 		put_pixel(x, y, *game->config.floor_color, game);
 		y++;
 	}
+}
+
+t_color	get_texture_pixel(t_texture texture, float x_coefficient, float y_coefficient)
+{
+	t_color	color_rgb;
+	int		color_hex;
+	int		x;
+	int		y;
+
+	x = texture.width * x_coefficient;
+	y = texture.height * y_coefficient;
+	color_hex = *(int *)(texture.addr + (y * texture.line_len + x * (texture.bpp / 8)));
+	
+	color_rgb.blue = (color_hex >> 16) & 0xFF;
+	color_rgb.green = (color_hex >> 8) & 0xFF;
+	color_rgb.red = color_hex & 0xFF;
+
+	return (color_rgb);
+}
+
+void	draw_walls(t_game *game, int x, float height, t_direction direction, float ray_x, float ray_y)
+{
+	float	x_coefficient;
+	float	y_coefficient;
+	int		wall_start;
+	int		wall_end;
+	int		y;
+	t_color color;
+
+	if (direction == North || direction == South)
+		x_coefficient = fmod(ray_x, BLOCK_SIZE) / BLOCK_SIZE;
+	else if (direction == West || direction == East)
+		x_coefficient = fmod(ray_y, BLOCK_SIZE) / BLOCK_SIZE;
+
+	wall_start = (HEIGHT - height) / 2;
+	wall_end = wall_start + height;
+	y = wall_start;
+	
+	while (y < wall_end)
+	{
+		color = (t_color){255, 0, 0};
+		y_coefficient = (y - wall_start) / height;
+		// printf("%f %f\n", x_coefficient, y_coefficient);
+		if (direction == North)
+			color = get_texture_pixel(game->north_texture, x_coefficient, y_coefficient);
+		else if (direction == South)
+			color = get_texture_pixel(game->south_texture, x_coefficient, y_coefficient);
+		else if (direction == West)
+			color = get_texture_pixel(game->west_texture, x_coefficient, y_coefficient);
+		else if (direction == East)
+			color = get_texture_pixel(game->east_texture, x_coefficient, y_coefficient);
+		put_pixel(x, y, color, game);
+		y++;
+	}
+
 }
 
 void	draw_line(t_player *player, t_game *game, float angle, int x)
@@ -274,11 +287,13 @@ void	draw_line(t_player *player, t_game *game, float angle, int x)
 	float		sin_angle;
 	float		ray_x;
 	float		ray_y;
-	float		dist;
 	int			angle_side;
+	int			quarter;
 	float		px;
 	float		py;
-	int			quarter;
+	float		dist;
+	int			height;
+
 	t_direction direction;
 
 	cos_angle = cos(angle);
@@ -296,21 +311,12 @@ void	draw_line(t_player *player, t_game *game, float angle, int x)
 	angle_side = near_angle(quarter, player->x, player->y, ray_x, ray_y, &px, &py);
 	direction = wall_direction(quarter, angle_side);
 	direction = check_adjacent(game, ray_x / BLOCK_SIZE, ray_y / BLOCK_SIZE, direction, quarter);
-	// printf("%f %f | ", ray_x, ray_y);
 	lines_intersection_point(player->x, player->y, ray_x, ray_y, px, py, quarter, angle_side, &ray_x, &ray_y);
-	// printf("%f %f\n", ray_x, ray_y);
-	t_color color;
-	if (direction == North)
-		color = (t_color){255, 0, 0};
-	else if (direction == South)
-		color = (t_color){0, 255, 0};
-	else if (direction == West)
-		color = (t_color){0, 0, 255};
-	else
-		color = (t_color){255, 255, 0};
 	// draw_square(ray_x, ray_y, 10, color, game);
 	dist = fixed_dist(player->x, player->y, ray_x, ray_y, game);
-	draw_line2(game, x, dist, color);
+	height = (BLOCK_SIZE / dist) * (WIDTH / 2);
+	draw_ceiling_floor(game, x, height);
+	draw_walls(game, x, height, direction, ray_x, ray_y);
 }
 
 long	current_time_ms(void)

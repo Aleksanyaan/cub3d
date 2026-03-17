@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:14 by pargev            #+#    #+#             */
-/*   Updated: 2026/03/15 21:52:22 by pargev           ###   ########.fr       */
+/*   Updated: 2026/03/17 22:09:42 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,17 @@ typedef struct s_config
 	char		**map;
 }				t_config;
 
+typedef struct s_texture
+{
+	void		*img;
+	char		*addr;
+	int			bpp;
+    int			line_len;
+    int			endian;
+    int			width;
+    int			height;
+}				t_texture;
+
 typedef struct s_player
 {
 	float		x;
@@ -81,7 +92,12 @@ typedef struct s_game
 	int			bpp;
 	int			size_line;
 	int			endian;
+
 	t_config	config;
+	t_texture	north_texture;
+	t_texture	south_texture;
+	t_texture	west_texture;
+	t_texture	east_texture;
 }				t_game;
 
 typedef enum direction
