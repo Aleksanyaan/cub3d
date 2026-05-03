@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 15:58:45 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/05/03 18:16:53 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 22:13:04 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	init_player(t_player *player, t_config *config)
 	player->key_right = 0;
 	player->left_rotate = 0;
 	player->right_rotate = 0;
+	player->mouse_active = 0;
 }
 
 int	key_press(int keycode, t_game *game)
@@ -81,6 +82,51 @@ void	rotate_palyer(t_player *player)
 		player->angle -= 2 * PI;
 	if (player->angle < 0)
 		player->angle += 2 * PI;
+}
+
+int mouse_press(int button, int x, int y, t_game *game)
+{
+    (void)y;
+
+    if (button == 1)
+	{
+        game->player->mouse_active = 1;
+		game->player->prev_mouse_x = x;
+	}
+    return (0);
+}
+
+int mouse_release(int button, int x, int y, t_game *game)
+{
+    (void)x;
+    (void)y;
+
+    if (button == 1)
+        game->player->mouse_active = 0;
+    return (0);
+}
+
+int mouse_move(int x, int y, t_game *game)
+{
+    int delta_x;
+    float sensitivity;
+
+    (void)y;
+	if (!game->player->mouse_active)
+		return (0);
+    sensitivity = 0.005;
+
+    delta_x = x - game->player->prev_mouse_x;
+    game->player->prev_mouse_x = x;
+
+    game->player->angle += delta_x * sensitivity;
+
+    if (game->player->angle > 2 * PI)
+        game->player->angle -= 2 * PI;
+    if (game->player->angle < 0)
+        game->player->angle += 2 * PI;
+
+    return (0);
 }
 
 void	move_player(t_player *player, t_game *game)

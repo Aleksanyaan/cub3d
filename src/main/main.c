@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:10 by pargev            #+#    #+#             */
-/*   Updated: 2026/05/03 16:43:52 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 22:10:12 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,9 @@ int	main(int argc, char	**argv)
 	init_game(game, config);
 	mlx_hook(game->win, 2, 1L << 0, key_press, game);
 	mlx_hook(game->win, 3, 1L << 1, key_release, game);
+	mlx_hook(game->win, 4, 1L << 2, mouse_press, game);
+	mlx_hook(game->win, 5, 1L << 3, mouse_release, game);
+	mlx_hook(game->win, 6, 1L << 6, mouse_move, game);
 	mlx_hook(game->win, 17, 0, close_window, game);
 	mlx_loop_hook(game->mlx, draw_loop, game);
 	mlx_loop(game->mlx);

@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:14 by pargev            #+#    #+#             */
-/*   Updated: 2026/05/03 18:12:11 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 22:10:33 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,9 @@ typedef struct s_player
 
 	int			left_rotate;
 	int			right_rotate;
+
+	int			mouse_active;
+	int			prev_mouse_x;
 }				t_player;
 
 typedef struct s_game
@@ -141,6 +144,9 @@ char			**ft_split2(char const *s, char *set);
 void			init_player(t_player *player, t_config *config);
 int				key_press(int keycode, t_game *game);
 int				key_release(int keycode, t_game *game);
+int				mouse_press(int button, int x, int y, t_game *game);
+int				mouse_release(int button, int x, int y, t_game *game);
+int				mouse_move(int x, int y, t_game *game);
 void			move_player(t_player *player, t_game *game);
 int				close_window(t_game *game);
 int				touch(float px, float py, t_game *game);
