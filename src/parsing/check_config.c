@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:05 by pargev            #+#    #+#             */
-/*   Updated: 2026/01/28 20:14:16 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 17:56:17 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	check_file_extension(char *path, char *extension)
 
 int	check_symbol(char **map, int i, int j)
 {
-	if (i >= 0 && j >= 0 && map[i] && map[i][j])
+	if (i >= 0 && j >= 0 && map[i] && j >= ft_strlen(map[i]))
 	{
 		if (map[i][j] != ' ' && map[i][j] != '1')
 			return (1);
@@ -94,6 +94,7 @@ void	cheack_config(t_config *config)
 		free_and_exit(config, NULL, ": <floor color> is missing or invalid");
 	if (!config->ceiling_color)
 		free_and_exit(config, NULL, ": <ceiling color> is missing or invalid");
-	if (!config->map || check_map(config->map))
-		free_and_exit(config, NULL, ": <map> is missing> or invalid");
+	if (!config->map || check_map(config->map)
+		|| config->x_position < 0)
+		free_and_exit(config, NULL, ": <map> is missing or invalid");
 }

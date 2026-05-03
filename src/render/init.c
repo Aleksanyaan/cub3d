@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 16:02:01 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/05/03 14:20:39 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 17:13:45 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	init_game(t_game *game, t_config config)
 		free_all(game);
 		exit(1);
 	}
-	init_player(game->player);
+	init_player(game->player, &game->config);
 	game->mlx = mlx_init();
 	if (!game->mlx)
 	{

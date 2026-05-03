@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:14 by pargev            #+#    #+#             */
-/*   Updated: 2026/05/03 14:12:08 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 17:13:01 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ typedef struct s_config
 	t_color		*floor_color;
 	t_color		*ceiling_color;
 	char		**map;
+	int			x_position;
+	int			y_position;
 }				t_config;
 
 typedef struct s_image
@@ -88,7 +90,6 @@ typedef struct s_player
 
 	int			left_rotate;
 	int			right_rotate;
-
 }				t_player;
 
 typedef struct s_game
@@ -136,7 +137,7 @@ char			*ft_strdup_free(char *s1);
 void			free_all(t_game *game);
 
 // ========= render =========
-void			init_player(t_player *player);
+void			init_player(t_player *player, t_config *config);
 int				key_press(int keycode, t_game *game);
 int				key_release(int keycode, t_game *game);
 void			move_player(t_player *player, t_game *game);

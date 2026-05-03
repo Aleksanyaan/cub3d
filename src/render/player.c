@@ -6,17 +6,24 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 15:58:45 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/05/03 14:13:49 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 17:20:52 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-void	init_player(t_player *player)
+void	init_player(t_player *player, t_config *config)
 {
-	player->x = WIDTH / 2;
-	player->y = HEIGHT / 2;
-	player->angle = 0;
+	player->x = BLOCK_SIZE * config->x_position + BLOCK_SIZE / 2;
+	player->y = BLOCK_SIZE * config->y_position + BLOCK_SIZE / 2;
+	if (config->map[config->y_position][config->x_position] == 'N')
+		player->angle = 3 * PI / 2;
+	else if (config->map[config->y_position][config->x_position] == 'S')
+		player->angle = PI / 2;
+	else if (config->map[config->y_position][config->x_position] == 'E')
+		player->angle = PI;
+	else
+		player->angle = 0;
 	player->key_up = 0;
 	player->key_down = 0;
 	player->key_left = 0;

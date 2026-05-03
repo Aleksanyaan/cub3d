@@ -6,11 +6,41 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:05 by pargev            #+#    #+#             */
-/*   Updated: 2026/02/21 14:28:43 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 17:38:19 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	parse_position(char **map, int *x_position, int *y_position)
+{
+	int	found;
+	int	x;
+	int	y;
+
+	*x_position = -1;
+	y = 0;
+	while (map[y])
+	{
+		x = 0;
+		while (map[y][x])
+		{
+			if (map[y][x] == 'N' || map[y][x] == 'S'
+				|| map[y][x] == 'E' || map[y][x] == 'W')
+			{
+				if (*x_position >= 0)
+				{
+					*x_position = -1;
+					return ; 
+				}
+				*x_position = x;
+				*y_position = y;
+			}
+			++x;
+		}
+		++y;
+	}
+}
 
 char	**parse_map(char **config_text, int start)
 {
@@ -70,6 +100,7 @@ int	parse_config(char **config_text, t_config *config)
 		else if (ft_str_only(info, " \n10NWES"))
 		{
 			config->map = parse_map(config_text, i);
+			parse_position(config->map, &config->x_position, &config->y_position);
 			break ;
 		}
 		else
