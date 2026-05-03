@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:14 by pargev            #+#    #+#             */
-/*   Updated: 2026/03/17 22:09:42 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 14:12:08 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 # include <string.h>
 # include <unistd.h>
 # include <sys/time.h>
+
+// # define WIDTH 1280
+// # define HEIGHT 720
 
 # define WIDTH 1280
 # define HEIGHT 720
@@ -54,13 +57,20 @@ typedef struct s_config
 	char		**map;
 }				t_config;
 
-typedef struct s_texture
+typedef struct s_image
 {
 	void		*img;
 	char		*addr;
 	int			bpp;
     int			line_len;
     int			endian;
+    int			width;
+    int			height;
+}				t_image;
+
+typedef struct s_texture
+{
+	t_color		**img;
     int			width;
     int			height;
 }				t_texture;

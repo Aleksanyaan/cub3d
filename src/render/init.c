@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 16:02:01 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/03/17 23:14:15 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 14:20:39 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,39 +27,58 @@ void	init_struct(t_game *game)
 	game->img = NULL;
 	game->data = NULL;
 	game->player = NULL;
-	game->north_texture.img = NULL;
-	game->south_texture.img = NULL;
-	game->west_texture.img = NULL;
-	game->east_texture.img = NULL;
 	game->bpp = 0;
 	game->size_line = 0;
 	game->endian = 0;
 }
 
-void	read_texture(t_game *game)
+t_color	get_img_pixel(t_image *img, int x, int y)
 {
-	t_texture	*north;
-	t_texture	*south;
-	t_texture	*west;
-	t_texture	*east;
+	t_color	color_rgb;
+	int		color_hex;
 
-	north = &game->north_texture;
-	south = &game->south_texture;
-	west = &game->west_texture;
-	east = &game->east_texture;
-	north->img = mlx_xpm_file_to_image(game->mlx, game->config.north_texture, &north->width, &north->height);
-	south->img = mlx_xpm_file_to_image(game->mlx, game->config.south_texture, &south->width, &south->height);
-	west->img = mlx_xpm_file_to_image(game->mlx, game->config.west_texture, &west->width, &west->height);
-	east->img = mlx_xpm_file_to_image(game->mlx, game->config.east_texture, &east->width, &east->height);
-    if (!north->img || !south->img || !west->img || !east->img)
+	color_hex = *(int *)(img->addr + (y * img->line_len + x * (img->bpp / 8)));
+	
+	color_rgb.blue = (color_hex >> 16) & 0xFF;
+	color_rgb.green = (color_hex >> 8) & 0xFF;
+	color_rgb.red = color_hex & 0xFF;
+
+	return (color_rgb);
+}
+
+void	read_texture(t_game *game, char *path, t_texture *texture)
+{
+	t_image		img;
+	int			i;
+	int			j;
+
+	img.img = mlx_xpm_file_to_image(game->mlx, path, &img.width, &img.height);
+    if (!img.img)
 	{
+		mlx_destroy_image(game->mlx, img.img);
 		free_all(game);
 		exit_with_error(": loading image\n");
 	}
-	north->addr = mlx_get_data_addr(north->img, &north->bpp, &north->line_len, &north->endian);
-	south->addr = mlx_get_data_addr(south->img, &south->bpp, &south->line_len, &south->endian);
-	west->addr = mlx_get_data_addr(west->img, &west->bpp, &west->line_len, &west->endian);
-	east->addr = mlx_get_data_addr(east->img, &east->bpp, &east->line_len, &east->endian);
+	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
+	
+	texture->width = img.width;
+	texture->height = img.height;
+	
+	texture->img = (t_color **)malloc(sizeof(t_color *) * (img.height + 1));
+	i = 0;
+	while (i < img.width)
+	{
+		texture->img[i] = (t_color *)malloc(sizeof(t_color) * (img.width + 1));
+		j = 0;
+		while (j < img.height)
+		{
+			texture->img[i][j] = get_img_pixel(&img, j, i);
+			j++;
+		}
+		i++;
+	}
+	texture->img[i] = 0;
+	mlx_destroy_image(game->mlx, img.img);
 }
 
 void	init_game(t_game *game, t_config config)
@@ -79,7 +98,11 @@ void	init_game(t_game *game, t_config config)
 		free_all(game);
 		exit(1);
 	}
-	read_texture(game);
+	read_texture(game, game->config.north_texture, &game->north_texture);
+	read_texture(game, game->config.west_texture, &game->west_texture);
+	read_texture(game, game->config.south_texture, &game->south_texture);
+	read_texture(game, game->config.east_texture, &game->east_texture);
+
 	game->win = mlx_new_window(game->mlx, WIDTH, HEIGHT, "Cube3D");
 	if (!game->win)
 	{

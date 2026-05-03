@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 15:58:45 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/03/14 22:45:22 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 14:13:49 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,13 +101,13 @@ void	move_player(t_player *player, t_game *game)
 	}
 	if (player->key_right)
 	{
-		new_x += -sin_angle * MOVE_SPEED;
-		new_y += cos_angle * MOVE_SPEED;
+		new_x += -sin_angle * MOVE_SPEED / 1.5;
+		new_y += cos_angle * MOVE_SPEED / 1.5;
 	}
 	if (player->key_left)
 	{
-		new_x += sin_angle * MOVE_SPEED;
-		new_y += -cos_angle * MOVE_SPEED;
+		new_x += sin_angle * MOVE_SPEED / 1.5;
+		new_y += -cos_angle * MOVE_SPEED / 1.5;
 	}
 
 	if (!is_wall(new_x + PLAYER_RADIUS, player->y, game)

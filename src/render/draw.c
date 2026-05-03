@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 16:05:16 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/03/18 00:05:48 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 14:19:36 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	put_pixel(int x, int y, t_color color, t_game *game)
 {
 	int	index;
 
-	if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0)
-		return ;
+	// if (x >= WIDTH || y >= HEIGHT || x < 0 || y < 0)
+	// 	return ;
 	index = y * game->size_line + x * game->bpp / 8;
 	game->data[index] = color.blue;
 	game->data[index + 1] = color.green;
@@ -213,35 +213,21 @@ void	draw_ceiling_floor(t_game *game, int x, float height)
 
 	y = 0;
 	wall_start = (HEIGHT - height) / 2;
+	if (wall_start > HEIGHT)
+		wall_start = HEIGHT;
 	while (y < wall_start)
 	{
 		put_pixel(x, y, *game->config.ceiling_color, game);
 		y++;
 	}
 	y = wall_start + height;
+	if (y < 0)
+		y = 0;
 	while (y < HEIGHT)
 	{
 		put_pixel(x, y, *game->config.floor_color, game);
 		y++;
 	}
-}
-
-t_color	get_texture_pixel(t_texture texture, float x_coefficient, float y_coefficient)
-{
-	t_color	color_rgb;
-	int		color_hex;
-	int		x;
-	int		y;
-
-	x = texture.width * x_coefficient;
-	y = texture.height * y_coefficient;
-	color_hex = *(int *)(texture.addr + (y * texture.line_len + x * (texture.bpp / 8)));
-	
-	color_rgb.blue = (color_hex >> 16) & 0xFF;
-	color_rgb.green = (color_hex >> 8) & 0xFF;
-	color_rgb.red = color_hex & 0xFF;
-
-	return (color_rgb);
 }
 
 void	draw_walls(t_game *game, int x, float height, t_direction direction, float ray_x, float ray_y)
@@ -251,6 +237,7 @@ void	draw_walls(t_game *game, int x, float height, t_direction direction, float 
 	int		wall_start;
 	int		wall_end;
 	int		y;
+	t_texture	*texture;
 	t_color color;
 
 	if (direction == North || direction == South)
@@ -260,21 +247,24 @@ void	draw_walls(t_game *game, int x, float height, t_direction direction, float 
 
 	wall_start = (HEIGHT - height) / 2;
 	wall_end = wall_start + height;
-	y = wall_start;
-	
+	y = 0;
+	if (wall_start > 0)
+		y = wall_start;
+	if (wall_end > HEIGHT)
+		wall_end = HEIGHT;
 	while (y < wall_end)
 	{
-		color = (t_color){255, 0, 0};
 		y_coefficient = (y - wall_start) / height;
 		// printf("%f %f\n", x_coefficient, y_coefficient);
 		if (direction == North)
-			color = get_texture_pixel(game->north_texture, x_coefficient, y_coefficient);
+			texture = &game->north_texture;
 		else if (direction == South)
-			color = get_texture_pixel(game->south_texture, x_coefficient, y_coefficient);
+			texture = &game->south_texture;
 		else if (direction == West)
-			color = get_texture_pixel(game->west_texture, x_coefficient, y_coefficient);
-		else if (direction == East)
-			color = get_texture_pixel(game->east_texture, x_coefficient, y_coefficient);
+			texture = &game->west_texture;
+		else if (direction == East) 
+			texture = &game->east_texture;
+		color = texture->img[(int)(texture->height * y_coefficient)][(int)(texture->width * x_coefficient)];
 		put_pixel(x, y, color, game);
 		y++;
 	}
@@ -314,7 +304,7 @@ void	draw_line(t_player *player, t_game *game, float angle, int x)
 	lines_intersection_point(player->x, player->y, ray_x, ray_y, px, py, quarter, angle_side, &ray_x, &ray_y);
 	// draw_square(ray_x, ray_y, 10, color, game);
 	dist = fixed_dist(player->x, player->y, ray_x, ray_y, game);
-	height = (BLOCK_SIZE / dist) * (WIDTH / 2);
+	height = (BLOCK_SIZE / dist) * (WIDTH / 1.2);
 	draw_ceiling_floor(game, x, height);
 	draw_walls(game, x, height, direction, ray_x, ray_y);
 }
