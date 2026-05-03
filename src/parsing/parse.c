@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:05 by pargev            #+#    #+#             */
-/*   Updated: 2026/05/03 17:38:19 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 20:04:28 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,13 @@ void	parse_position(char **map, int *x_position, int *y_position)
 	int	x;
 	int	y;
 
+	if (!map)
+		return ;
 	*x_position = -1;
 	y = 0;
 	while (map[y])
 	{
+		printf("%d\n", y);
 		x = 0;
 		while (map[y][x])
 		{
@@ -53,10 +56,9 @@ char	**parse_map(char **config_text, int start)
 		len++;
 	map = (char **)ft_calloc(sizeof(char *), len + 1);
 	i = 0;
-	while (config_text[start + i])
+	while (config_text[start + i] && config_text[start + i][0] != '\n')
 	{
-		if (config_text[start + i][0] == '\n'
-			|| !ft_str_only(config_text[start + i], " \n10NWES"))
+		if (!ft_str_only(config_text[start + i], " \n10NWES"))
 		{
 			free_string_array(map);
 			return (NULL);
@@ -64,18 +66,27 @@ char	**parse_map(char **config_text, int start)
 		map[i] = ft_strdup_free(ft_strtrim(config_text[start + i], "\n"));
 		i++;
 	}
+	while (config_text[start + i])
+	{
+		if (!ft_str_only(config_text[start + i], " \n"))
+		{
+			free_string_array(map);
+			return (NULL);
+		}
+		++i;
+	}
 	return (map);
 }
 
 int	parse_textures(char *info, t_config *config)
 {
-	if (ft_strnstr(info, "NO", 2) == info)
+	if (!config->north_texture && ft_strnstr(info, "NO", 2) == info)
 		config->north_texture = ft_strtrim(info + 2, " \n");
-	else if (ft_strnstr(info, "SO", 2) == info)
+	else if (!config->south_texture && ft_strnstr(info, "SO", 2) == info)
 		config->south_texture = ft_strtrim(info + 2, " \n");
-	else if (ft_strnstr(info, "WE", 2) == info)
+	else if (!config->west_texture && ft_strnstr(info, "WE", 2) == info)
 		config->west_texture = ft_strtrim(info + 2, " \n");
-	else if (ft_strnstr(info, "EA", 2) == info)
+	else if (!config->east_texture && ft_strnstr(info, "EA", 2) == info)
 		config->east_texture = ft_strtrim(info + 2, " \n");
 	else
 		return (0);
@@ -91,6 +102,8 @@ int	parse_config(char **config_text, t_config *config)
 	while (config_text[i])
 	{
 		info = config_text[i];
+		while (*info == ' ')
+			info++;
 		if (info[0] == '\n' || parse_textures(info, config))
 			;
 		else if (ft_strnstr(info, "F", 1) == info)

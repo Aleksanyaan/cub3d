@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:05 by pargev            #+#    #+#             */
-/*   Updated: 2026/05/03 17:56:17 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 18:52:31 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,10 @@ int	check_file_extension(char *path, char *extension)
 
 int	check_symbol(char **map, int i, int j)
 {
-	if (i >= 0 && j >= 0 && map[i] && j >= ft_strlen(map[i]))
+	if (i >= 0 && j >= 0 && map[i])
 	{
+		if (j >= ft_strlen(map[i]))
+			return (0);
 		if (map[i][j] != ' ' && map[i][j] != '1')
 			return (1);
 	}
@@ -71,8 +73,32 @@ int	check_map(char **map)
 					return (1);
 			}
 			else if ((i == 0 || j == 0 || !map[i + 1] || !map[i][j + 1]))
+			{
 				if (map[i][j] != '1')
+				{
+					printf("+\n");
 					return (1);
+				}
+			}
+			else if (ft_strchr("0NSWE", map[i][j]) > 0)
+			{
+				if (i > 0)
+				{
+					if (map[i][j + 1] && ft_strlen(map[i - 1]) < j + 2)
+					{
+						printf("=\n");
+						return (1);
+					}
+				}
+				if (map[i + 1])
+				{
+					if (map[i][j + 1] && ft_strlen(map[i + 1]) < j + 2)
+					{
+						printf("+\n");
+						return (1);
+					}
+				}
+			}
 			j++;
 		}
 		i++;

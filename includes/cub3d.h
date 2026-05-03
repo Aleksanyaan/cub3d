@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:14 by pargev            #+#    #+#             */
-/*   Updated: 2026/05/03 17:13:01 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 18:12:11 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ void			free_config(t_config *config);
 int				ft_str_only(const char *s, const char *allowed);
 char			*ft_strdup_free(char *s1);
 void			free_all(t_game *game);
+char			**ft_split2(char const *s, char *set);
 
 // ========= render =========
 void			init_player(t_player *player, t_config *config);

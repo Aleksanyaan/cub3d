@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 15:58:45 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/05/03 17:20:52 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 18:16:53 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	init_player(t_player *player, t_config *config)
 		player->angle = 3 * PI / 2;
 	else if (config->map[config->y_position][config->x_position] == 'S')
 		player->angle = PI / 2;
-	else if (config->map[config->y_position][config->x_position] == 'E')
+	else if (config->map[config->y_position][config->x_position] == 'W')
 		player->angle = PI;
 	else
 		player->angle = 0;
@@ -72,7 +72,7 @@ void	rotate_palyer(t_player *player)
 {
 	float	angle_speed;
 
-	angle_speed = 0.03;
+	angle_speed = 0.04;
 	if (player->left_rotate)
 		player->angle -= angle_speed;
 	if (player->right_rotate)
@@ -108,13 +108,13 @@ void	move_player(t_player *player, t_game *game)
 	}
 	if (player->key_right)
 	{
-		new_x += -sin_angle * MOVE_SPEED / 1.5;
-		new_y += cos_angle * MOVE_SPEED / 1.5;
+		new_x += -sin_angle * MOVE_SPEED;
+		new_y += cos_angle * MOVE_SPEED;
 	}
 	if (player->key_left)
 	{
-		new_x += sin_angle * MOVE_SPEED / 1.5;
-		new_y += -cos_angle * MOVE_SPEED / 1.5;
+		new_x += sin_angle * MOVE_SPEED;
+		new_y += -cos_angle * MOVE_SPEED;
 	}
 
 	if (!is_wall(new_x + PLAYER_RADIUS, player->y, game)

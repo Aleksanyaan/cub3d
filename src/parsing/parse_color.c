@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:05 by pargev            #+#    #+#             */
-/*   Updated: 2026/02/28 23:38:45 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 18:12:51 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_color	*parse_color(char *color_text)
 	int		len;
 	t_color	*color;
 
-	color_matrix = ft_split(color_text, ',');
+	color_matrix = ft_split2(color_text, ", ");
 	len = 0;
 	while (color_matrix[len])
 		len++;

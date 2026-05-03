@@ -6,7 +6,7 @@
 /*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 16:02:01 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/05/03 17:13:45 by pargev           ###   ########.fr       */
+/*   Updated: 2026/05/03 19:03:39 by pargev           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ void	init_struct(t_game *game)
 	game->bpp = 0;
 	game->size_line = 0;
 	game->endian = 0;
+	game->north_texture.img = 0;
+	game->south_texture.img = 0;
+	game->west_texture.img = 0;
+	game->east_texture.img = 0;
 }
 
 t_color	get_img_pixel(t_image *img, int x, int y)
@@ -55,9 +59,8 @@ void	read_texture(t_game *game, char *path, t_texture *texture)
 	img.img = mlx_xpm_file_to_image(game->mlx, path, &img.width, &img.height);
     if (!img.img)
 	{
-		mlx_destroy_image(game->mlx, img.img);
 		free_all(game);
-		exit_with_error(": loading image\n");
+		exit_with_error(": loading image");
 	}
 	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
 	
