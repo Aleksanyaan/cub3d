@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:05 by pargev            #+#    #+#             */
-/*   Updated: 2026/05/03 20:04:28 by pargev           ###   ########.fr       */
+/*   Updated: 2026/06/17 13:56:57 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	parse_position(char **map, int *x_position, int *y_position)
 {
-	int	found;
 	int	x;
 	int	y;
 
@@ -28,13 +27,13 @@ void	parse_position(char **map, int *x_position, int *y_position)
 		x = 0;
 		while (map[y][x])
 		{
-			if (map[y][x] == 'N' || map[y][x] == 'S'
-				|| map[y][x] == 'E' || map[y][x] == 'W')
+			if (map[y][x] == 'N' || map[y][x] == 'S' || map[y][x] == 'E'
+				|| map[y][x] == 'W')
 			{
 				if (*x_position >= 0)
 				{
 					*x_position = -1;
-					return ; 
+					return ;
 				}
 				*x_position = x;
 				*y_position = y;
@@ -113,7 +112,8 @@ int	parse_config(char **config_text, t_config *config)
 		else if (ft_str_only(info, " \n10NWES"))
 		{
 			config->map = parse_map(config_text, i);
-			parse_position(config->map, &config->x_position, &config->y_position);
+			parse_position(config->map, &config->x_position,
+				&config->y_position);
 			break ;
 		}
 		else
@@ -128,6 +128,7 @@ t_config	parse(char *path)
 	char		**config_text;
 	t_config	config;
 
+	ft_bzero(&config, sizeof(t_config));
 	if (!check_file_extension(path, "cub"))
 		exit_with_error(": configuration's extension must be .cub");
 	config_text = read_config(path);

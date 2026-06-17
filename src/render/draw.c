@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 16:05:16 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/05/03 14:19:36 by pargev           ###   ########.fr       */
+/*   Updated: 2026/06/17 13:58:04 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	draw_square(int x, int y, int size, t_color color, t_game *game)
 void	draw_map(t_game *game)
 {
 	char	**map;
-	t_color		color;
+	t_color	color;
 	int		y;
 	int		x;
 
@@ -85,8 +85,7 @@ int	calculate_quarter(float angle)
 		angle = 2 * PI + angle;
 	else if (angle >= 2 * PI)
 		angle = angle - 2 * PI;
-
-	if (angle < PI/2)
+	if (angle < PI / 2)
 		return (1);
 	else if (angle < PI)
 		return (2);
@@ -96,10 +95,11 @@ int	calculate_quarter(float angle)
 }
 
 // calculates neearest recatangle paints coordinates and returns from what side of line is it
-int	near_angle(int quarter, float start_x, float start_y, float end_x, float end_y, float *px, float *py)
+int	near_angle(int quarter, float start_x, float start_y, float end_x,
+		float end_y, float *px, float *py)
 {
-	int		px_coefficent;
-	int		py_coefficent;
+	int	px_coefficent;
+	int	py_coefficent;
 
 	if (quarter == 1)
 	{
@@ -123,12 +123,13 @@ int	near_angle(int quarter, float start_x, float start_y, float end_x, float end
 	}
 	*px = ((int)(end_x / BLOCK_SIZE) + px_coefficent) * BLOCK_SIZE;
 	*py = ((int)(end_y / BLOCK_SIZE) + py_coefficent) * BLOCK_SIZE;
-	return ((end_x - start_x) * (*py - start_y) - (end_y - start_y) * (*px - start_x));
+	return ((end_x - start_x) * (*py - start_y) - (end_y - start_y) * (*px
+			- start_x));
 }
 
 t_direction	wall_direction(int quarter, int side)
 {
-	t_direction directions[2];
+	t_direction	directions[2];
 
 	if (quarter == 1)
 	{
@@ -150,25 +151,28 @@ t_direction	wall_direction(int quarter, int side)
 		directions[0] = North;
 		directions[1] = East;
 	}
-
 	if (side < 0)
 		return (directions[0]);
 	return (directions[1]);
 }
 
-t_direction	check_adjacent(t_game *game, int x, int y, t_direction direction, int quarter)
+t_direction	check_adjacent(t_game *game, int x, int y, t_direction direction,
+		int quarter)
 {
 	t_direction	new_direction;
 
-	if ((direction == West && quarter == 3) || (direction == East && quarter == 4))
+	if ((direction == West && quarter == 3) || (direction == East
+			&& quarter == 4))
 		new_direction = North;
-	else if ((direction == West && quarter == 2) || (direction == East && quarter == 1))
+	else if ((direction == West && quarter == 2) || (direction == East
+			&& quarter == 1))
 		new_direction = South;
-	else if ((direction == North && quarter == 3) || (direction == South && quarter == 2))
+	else if ((direction == North && quarter == 3) || (direction == South
+			&& quarter == 2))
 		new_direction = West;
-	else if ((direction == North && quarter == 4) || (direction == South && quarter == 1))
+	else if ((direction == North && quarter == 4) || (direction == South
+			&& quarter == 1))
 		new_direction = East;
-
 	if (direction == North)
 		y++;
 	else if (direction == South)
@@ -177,15 +181,13 @@ t_direction	check_adjacent(t_game *game, int x, int y, t_direction direction, in
 		x++;
 	else if (direction == East)
 		x--;
-
 	if (game->config.map[y][x] == '1')
 		return (new_direction);
 	return (direction);
 }
 
 void	lines_intersection_point(float x1, float y1, float x2, float y2,
-								float px, float py, int quarter, int side,
-								float *x, float *y)
+		float px, float py, int quarter, int side, float *x, float *y)
 {
 	float	angle;
 	float	dx;
@@ -194,22 +196,21 @@ void	lines_intersection_point(float x1, float y1, float x2, float y2,
 	float	den;
 
 	angle = PI / 2;
-	if ((quarter == 1 && side >= 0) || (quarter == 2 && side < 0) || (quarter == 3 && side >= 0) || (quarter == 4 && side < 0))
+	if ((quarter == 1 && side >= 0) || (quarter == 2 && side < 0)
+		|| (quarter == 3 && side >= 0) || (quarter == 4 && side < 0))
 		angle = 0;
-
 	dx = cos(angle);
 	dy = sin(angle);
 	den = (x2 - x1) * dy - (y2 - y1) * dx;
 	u = ((px - x1) * dy - (py - y1) * dx) / den;
-
-    *x = x1 + u * (x2 - x1);
-    *y = y1 + u * (y2 - y1);
+	*x = x1 + u * (x2 - x1);
+	*y = y1 + u * (y2 - y1);
 }
 
 void	draw_ceiling_floor(t_game *game, int x, float height)
 {
-	int		y;
-	int		wall_start;
+	int	y;
+	int	wall_start;
 
 	y = 0;
 	wall_start = (HEIGHT - height) / 2;
@@ -230,21 +231,21 @@ void	draw_ceiling_floor(t_game *game, int x, float height)
 	}
 }
 
-void	draw_walls(t_game *game, int x, float height, t_direction direction, float ray_x, float ray_y)
+void	draw_walls(t_game *game, int x, float height, t_direction direction,
+		float ray_x, float ray_y)
 {
-	float	x_coefficient;
-	float	y_coefficient;
-	int		wall_start;
-	int		wall_end;
-	int		y;
+	float		x_coefficient;
+	float		y_coefficient;
+	int			wall_start;
+	int			wall_end;
+	int			y;
 	t_texture	*texture;
-	t_color color;
+	t_color		color;
 
 	if (direction == North || direction == South)
 		x_coefficient = fmod(ray_x, BLOCK_SIZE) / BLOCK_SIZE;
 	else if (direction == West || direction == East)
 		x_coefficient = fmod(ray_y, BLOCK_SIZE) / BLOCK_SIZE;
-
 	wall_start = (HEIGHT - height) / 2;
 	wall_end = wall_start + height;
 	y = 0;
@@ -255,20 +256,19 @@ void	draw_walls(t_game *game, int x, float height, t_direction direction, float 
 	while (y < wall_end)
 	{
 		y_coefficient = (y - wall_start) / height;
-		// printf("%f %f\n", x_coefficient, y_coefficient);
 		if (direction == North)
 			texture = &game->north_texture;
 		else if (direction == South)
 			texture = &game->south_texture;
 		else if (direction == West)
 			texture = &game->west_texture;
-		else if (direction == East) 
+		else if (direction == East)
 			texture = &game->east_texture;
-		color = texture->img[(int)(texture->height * y_coefficient)][(int)(texture->width * x_coefficient)];
+		color = texture->img[(int)(texture->height
+				* y_coefficient)][(int)(texture->width * x_coefficient)];
 		put_pixel(x, y, color, game);
 		y++;
 	}
-
 }
 
 void	draw_line(t_player *player, t_game *game, float angle, int x)
@@ -283,8 +283,7 @@ void	draw_line(t_player *player, t_game *game, float angle, int x)
 	float		py;
 	float		dist;
 	int			height;
-
-	t_direction direction;
+	t_direction	direction;
 
 	cos_angle = cos(angle);
 	sin_angle = sin(angle);
@@ -292,17 +291,17 @@ void	draw_line(t_player *player, t_game *game, float angle, int x)
 	ray_y = player->y;
 	while (!touch(ray_x, ray_y, game))
 	{
-		// put_pixel(ray_x, ray_y, (t_color){255, 0, 0}, game);
 		ray_x += cos_angle;
 		ray_y += sin_angle;
 	}
-
 	quarter = calculate_quarter(angle);
-	angle_side = near_angle(quarter, player->x, player->y, ray_x, ray_y, &px, &py);
+	angle_side = near_angle(quarter, player->x, player->y, ray_x, ray_y, &px,
+			&py);
 	direction = wall_direction(quarter, angle_side);
-	direction = check_adjacent(game, ray_x / BLOCK_SIZE, ray_y / BLOCK_SIZE, direction, quarter);
-	lines_intersection_point(player->x, player->y, ray_x, ray_y, px, py, quarter, angle_side, &ray_x, &ray_y);
-	// draw_square(ray_x, ray_y, 10, color, game);
+	direction = check_adjacent(game, ray_x / BLOCK_SIZE, ray_y / BLOCK_SIZE,
+			direction, quarter);
+	lines_intersection_point(player->x, player->y, ray_x, ray_y, px, py,
+		quarter, angle_side, &ray_x, &ray_y);
 	dist = fixed_dist(player->x, player->y, ray_x, ray_y, game);
 	height = (BLOCK_SIZE / dist) * (WIDTH / 1.2);
 	draw_ceiling_floor(game, x, height);
@@ -319,9 +318,10 @@ long	current_time_ms(void)
 
 void	draw_fps(t_game *game, long *last_time, int *frames)
 {
-	long	now_time;
-	char	*fps_str;
+	long    now_time;
+	char    *fps_str;
 
+        (void)game;
 	now_time = current_time_ms();
 	(*frames)++;
 	if (now_time - *last_time >= 1000)
@@ -337,15 +337,13 @@ void	draw_fps(t_game *game, long *last_time, int *frames)
 int	draw_loop(t_game *game)
 {
 	static long	last_time = 0;
-    static int	frames = 0;
+	static int	frames = 0;
 	float		fraction;
 	float		start_x;
 	int			i;
 
 	ft_bzero(game->data, HEIGHT * game->size_line);
 	move_player(game->player, game);
-	// draw_square(game->player->x, game->player->y, 15, (t_color){0, 255, 0}, game);
-	// draw_map(game);
 	fraction = PI / 3 / WIDTH;
 	start_x = game->player->angle - PI / 6;
 	i = 0;

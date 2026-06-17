@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_config.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/25 15:21:05 by pargev            #+#    #+#             */
-/*   Updated: 2026/05/03 18:52:31 by pargev           ###   ########.fr       */
+/*   Updated: 2026/06/17 13:56:57 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	check_symbol(char **map, int i, int j)
 {
 	if (i >= 0 && j >= 0 && map[i])
 	{
-		if (j >= ft_strlen(map[i]))
+		if ((size_t)j >= ft_strlen(map[i]))
 			return (0);
 		if (map[i][j] != ' ' && map[i][j] != '1')
 			return (1);
@@ -44,14 +44,10 @@ int	check_symbol(char **map, int i, int j)
 
 int	check_border(char **map, int i, int j)
 {
-	if (check_symbol(map, i - 1, j)
-		|| check_symbol(map, i - 1, j - 1)
-		|| check_symbol(map, i - 1, j + 1)
-		|| check_symbol(map, i, j - 1)
-		|| check_symbol(map, i, j + 1)
-		|| check_symbol(map, i + 1, j)
-		|| check_symbol(map, i + 1, j - 1)
-		|| check_symbol(map, i + 1, j + 1))
+	if (check_symbol(map, i - 1, j) || check_symbol(map, i - 1, j - 1)
+		|| check_symbol(map, i - 1, j + 1) || check_symbol(map, i, j - 1)
+		|| check_symbol(map, i, j + 1) || check_symbol(map, i + 1, j)
+		|| check_symbol(map, i + 1, j - 1) || check_symbol(map, i + 1, j + 1))
 		return (1);
 	return (0);
 }
@@ -84,7 +80,7 @@ int	check_map(char **map)
 			{
 				if (i > 0)
 				{
-					if (map[i][j + 1] && ft_strlen(map[i - 1]) < j + 2)
+					if (map[i][j + 1] && ft_strlen(map[i - 1]) < (size_t)j + 2)
 					{
 						printf("=\n");
 						return (1);
@@ -92,7 +88,7 @@ int	check_map(char **map)
 				}
 				if (map[i + 1])
 				{
-					if (map[i][j + 1] && ft_strlen(map[i + 1]) < j + 2)
+					if (map[i][j + 1] && ft_strlen(map[i + 1]) < (size_t)j + 2)
 					{
 						printf("+\n");
 						return (1);
@@ -120,7 +116,6 @@ void	cheack_config(t_config *config)
 		free_and_exit(config, NULL, ": <floor color> is missing or invalid");
 	if (!config->ceiling_color)
 		free_and_exit(config, NULL, ": <ceiling color> is missing or invalid");
-	if (!config->map || check_map(config->map)
-		|| config->x_position < 0)
+	if (!config->map || check_map(config->map) || config->x_position < 0)
 		free_and_exit(config, NULL, ": <map> is missing or invalid");
 }
