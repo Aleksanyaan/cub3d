@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/25 15:21:10 by pargev            #+#    #+#             */
-/*   Updated: 2026/05/03 22:10:12 by pargev           ###   ########.fr       */
+/*   Created: 2026/06/18 13:21:33 by zaleksan          #+#    #+#             */
+/*   Updated: 2026/06/18 13:23:16 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
 
 int	main(int argc, char	**argv)
 {
@@ -20,23 +19,11 @@ int	main(int argc, char	**argv)
 
 	if (argc != 2)
 		return (1);
-	
 	config = parse(argv[1]);
 	printf("%s\n", config.north_texture);
 	printf("%s\n", config.south_texture);
 	printf("%s\n", config.west_texture);
 	printf("%s\n", config.east_texture);
-	// printf("%d,%d,%d\n", config.floor_color->red, config.floor_color->green,
-	// 	config.floor_color->blue);
-	// printf("%d,%d,%d\n", config.ceiling_color->red, config.ceiling_color->green,
-	// 	config.ceiling_color->blue);
-	// i = 0;
-	// while (config.map && config.map[i])
-	// {
-	// 	printf("%s\n", config.map[i]);
-	// 	i++;
-	// }
-
 	game = malloc(sizeof(t_game));
 	if (!game)
 		free_and_exit(&config, NULL, "");
@@ -51,4 +38,3 @@ int	main(int argc, char	**argv)
 	mlx_loop(game->mlx);
 	free_all(game);
 }
-

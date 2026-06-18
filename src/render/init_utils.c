@@ -1,27 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   collision.c                                        :+:      :+:    :+:   */
+/*   init_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/18 13:45:01 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/06/18 13:45:03 by zaleksan         ###   ########.fr       */
+/*   Created: 2026/06/18 14:47:52 by zaleksan          #+#    #+#             */
+/*   Updated: 2026/06/18 14:48:22 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cub3d.h"
 
-int	is_wall(double x, double y, t_game *game)
+int	close_window(t_game *game)
 {
-	int	map_x;
-	int	map_y;
+	if (!game)
+		exit(1);
+	free_all(game);
+	exit(0);
+}
 
-	map_x = (int)(x / BLOCK_SIZE);
-	map_y = (int)(y / BLOCK_SIZE);
-	if (map_y < 0 || !game->config.map[map_y])
-		return (1);
-	if (map_x < 0 || game->config.map[map_y][map_x] == '\0')
-		return (1);
-	return (game->config.map[map_y][map_x] == '1');
+void	init_struct(t_game *game)
+{
+	game->mlx = NULL;
+	game->win = NULL;
+	game->img = NULL;
+	game->data = NULL;
+	game->player = NULL;
+	game->bpp = 0;
+	game->size_line = 0;
+	game->endian = 0;
+	game->north_texture.img = 0;
+	game->south_texture.img = 0;
+	game->west_texture.img = 0;
+	game->east_texture.img = 0;
 }

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/25 15:21:05 by pargev            #+#    #+#             */
-/*   Updated: 2026/06/17 14:02:43 by zaleksan         ###   ########.fr       */
+/*   Created: 2026/06/18 13:43:58 by zaleksan          #+#    #+#             */
+/*   Updated: 2026/06/18 13:44:01 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	free_config(t_config *config)
 void	free_img(t_color **img)
 {
 	int	i;
-	
+
 	if (img)
 	{
 		i = 0;

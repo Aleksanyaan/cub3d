@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/30 15:58:45 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/05/03 22:13:04 by pargev           ###   ########.fr       */
+/*   Created: 2026/06/18 14:51:13 by zaleksan          #+#    #+#             */
+/*   Updated: 2026/06/18 14:55:02 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,89 +84,21 @@ void	rotate_palyer(t_player *player)
 		player->angle += 2 * PI;
 }
 
-int mouse_press(int button, int x, int y, t_game *game)
-{
-    (void)y;
-
-    if (button == 1)
-	{
-        game->player->mouse_active = 1;
-		game->player->prev_mouse_x = x;
-	}
-    return (0);
-}
-
-int mouse_release(int button, int x, int y, t_game *game)
-{
-    (void)x;
-    (void)y;
-
-    if (button == 1)
-        game->player->mouse_active = 0;
-    return (0);
-}
-
-int mouse_move(int x, int y, t_game *game)
-{
-    int delta_x;
-    float sensitivity;
-
-    (void)y;
-	if (!game->player->mouse_active)
-		return (0);
-    sensitivity = 0.005;
-
-    delta_x = x - game->player->prev_mouse_x;
-    game->player->prev_mouse_x = x;
-
-    game->player->angle += delta_x * sensitivity;
-
-    if (game->player->angle > 2 * PI)
-        game->player->angle -= 2 * PI;
-    if (game->player->angle < 0)
-        game->player->angle += 2 * PI;
-
-    return (0);
-}
-
 void	move_player(t_player *player, t_game *game)
 {
-	double	new_x;
-	double	new_y;
-	double	cos_angle;
-	double	sin_angle;
+	double		new_x;
+	double		new_y;
+	t_angles	a;
 
 	rotate_palyer(player);
-	cos_angle = cos(player->angle);
-	sin_angle = sin(player->angle);
+	a.cos_a = cos(player->angle);
+	a.sin_a = sin(player->angle);
 	new_x = player->x;
 	new_y = player->y;
-
-	if (player->key_up)
-	{
-		new_x += cos_angle * MOVE_SPEED;
-		new_y += sin_angle * MOVE_SPEED;
-	}
-	if (player->key_down)
-	{
-		new_x -= cos_angle * MOVE_SPEED;
-		new_y -= sin_angle * MOVE_SPEED;
-	}
-	if (player->key_right)
-	{
-		new_x += -sin_angle * MOVE_SPEED;
-		new_y += cos_angle * MOVE_SPEED;
-	}
-	if (player->key_left)
-	{
-		new_x += sin_angle * MOVE_SPEED;
-		new_y += -cos_angle * MOVE_SPEED;
-	}
-
+	apply_movement(player, a, &new_x, &new_y);
 	if (!is_wall(new_x + PLAYER_RADIUS, player->y, game)
 		&& !is_wall(new_x - PLAYER_RADIUS, player->y, game))
 		player->x = new_x;
-
 	if (!is_wall(player->x, new_y + PLAYER_RADIUS, game)
 		&& !is_wall(player->x, new_y - PLAYER_RADIUS, game))
 		player->y = new_y;

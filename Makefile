@@ -10,9 +10,9 @@ LIBFT_A		=	$(LIBFT_DIR)/libft.a
 MLX_A		=	$(MLX_DIR)/libmlx.a
 
 MAIN		=	main.c
-PARSING		=	parse.c parse_color.c check_config.c read_file.c
+PARSING		=	parse.c parse_color.c check_config.c check_config_utils.c parse_utils.c read_file.c
 UTILS		=	free.c ft_str.c exit.c ft_split2.c
-RENDER		=	distance.c draw.c init.c player.c collision.c
+RENDER		=	distance.c draw.c init.c player.c collision.c mouse.c init_utils.c draw_utils.c draw_utils2.c draw_line.c draw_fps.c
 
 NAME		=	cub3d
 

@@ -5,74 +5,28 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/25 15:21:05 by pargev            #+#    #+#             */
-/*   Updated: 2026/06/17 13:56:57 by zaleksan         ###   ########.fr       */
+/*   Created: 2026/06/18 13:35:55 by zaleksan          #+#    #+#             */
+/*   Updated: 2026/06/18 13:40:56 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	parse_position(char **map, int *x_position, int *y_position)
-{
-	int	x;
-	int	y;
-
-	if (!map)
-		return ;
-	*x_position = -1;
-	y = 0;
-	while (map[y])
-	{
-		printf("%d\n", y);
-		x = 0;
-		while (map[y][x])
-		{
-			if (map[y][x] == 'N' || map[y][x] == 'S' || map[y][x] == 'E'
-				|| map[y][x] == 'W')
-			{
-				if (*x_position >= 0)
-				{
-					*x_position = -1;
-					return ;
-				}
-				*x_position = x;
-				*y_position = y;
-			}
-			++x;
-		}
-		++y;
-	}
-}
-
 char	**parse_map(char **config_text, int start)
 {
 	int		len;
 	char	**map;
-	int		i;
 
 	len = start;
 	while (config_text[len])
 		len++;
 	map = (char **)ft_calloc(sizeof(char *), len + 1);
-	i = 0;
-	while (config_text[start + i] && config_text[start + i][0] != '\n')
+	if (!map)
+		return (NULL);
+	if (!parse_map_rows(config_text, map, start))
 	{
-		if (!ft_str_only(config_text[start + i], " \n10NWES"))
-		{
-			free_string_array(map);
-			return (NULL);
-		}
-		map[i] = ft_strdup_free(ft_strtrim(config_text[start + i], "\n"));
-		i++;
-	}
-	while (config_text[start + i])
-	{
-		if (!ft_str_only(config_text[start + i], " \n"))
-		{
-			free_string_array(map);
-			return (NULL);
-		}
-		++i;
+		free_string_array(map);
+		return (NULL);
 	}
 	return (map);
 }
@@ -92,10 +46,31 @@ int	parse_textures(char *info, t_config *config)
 	return (1);
 }
 
+static int	parse_config_line(char **config_text, t_config *config,
+				char *info, int i)
+{
+	if (info[0] == '\n' || parse_textures(info, config))
+		return (0);
+	if (ft_strnstr(info, "F", 1) == info)
+		config->floor_color = parse_color(ft_strtrim(info + 1, " \n"));
+	else if (ft_strnstr(info, "C", 1) == info)
+		config->ceiling_color = parse_color(ft_strtrim(info + 1, " \n"));
+	else if (ft_str_only(info, " \n10NWES"))
+	{
+		config->map = parse_map(config_text, i);
+		parse_position(config->map, &config->x_position, &config->y_position);
+		return (2);
+	}
+	else
+		return (1);
+	return (0);
+}
+
 int	parse_config(char **config_text, t_config *config)
 {
 	int		i;
 	char	*info;
+	int		ret;
 
 	i = 0;
 	while (config_text[i])
@@ -103,21 +78,11 @@ int	parse_config(char **config_text, t_config *config)
 		info = config_text[i];
 		while (*info == ' ')
 			info++;
-		if (info[0] == '\n' || parse_textures(info, config))
-			;
-		else if (ft_strnstr(info, "F", 1) == info)
-			config->floor_color = parse_color(ft_strtrim(info + 1, " \n"));
-		else if (ft_strnstr(info, "C", 1) == info)
-			config->ceiling_color = parse_color(ft_strtrim(info + 1, " \n"));
-		else if (ft_str_only(info, " \n10NWES"))
-		{
-			config->map = parse_map(config_text, i);
-			parse_position(config->map, &config->x_position,
-				&config->y_position);
-			break ;
-		}
-		else
+		ret = parse_config_line(config_text, config, info, i);
+		if (ret == 1)
 			return (1);
+		if (ret == 2)
+			break ;
 		i++;
 	}
 	return (0);
@@ -133,10 +98,8 @@ t_config	parse(char *path)
 		exit_with_error(": configuration's extension must be .cub");
 	config_text = read_config(path);
 	if (parse_config(config_text, &config))
-	{
 		free_and_exit(&config, config_text,
 			": configuration contains an invalid identifier");
-	}
 	free_string_array(config_text);
 	cheack_config(&config);
 	return (config);

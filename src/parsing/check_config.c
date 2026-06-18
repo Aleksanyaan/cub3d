@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/25 15:21:05 by pargev            #+#    #+#             */
-/*   Updated: 2026/06/17 13:56:57 by zaleksan         ###   ########.fr       */
+/*   Created: 2026/06/18 13:23:57 by zaleksan          #+#    #+#             */
+/*   Updated: 2026/06/18 13:28:18 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,56 @@ int	check_border(char **map, int i, int j)
 	return (0);
 }
 
+// int	check_map(char **map)
+// {
+// 	int	i;
+// 	int	j;
+
+// 	i = 0;
+// 	while (map[i])
+// 	{
+// 		j = 0;
+// 		while (map[i][j])
+// 		{
+// 			if (map[i][j] == ' ')
+// 			{
+// 				if (check_border(map, i, j))
+// 					return (1);
+// 			}
+// 			else if ((i == 0 || j == 0 || !map[i + 1] || !map[i][j + 1]))
+// 			{
+// 				if (map[i][j] != '1')
+// 				{
+// 					printf("+\n");
+// 					return (1);
+// 				}
+// 			}
+// 			else if (ft_strchr("0NSWE", map[i][j]) > 0)
+// 			{
+// 				if (i > 0)
+// 				{
+// 					if (map[i][j + 1] && ft_strlen(map[i - 1]) < (size_t)j + 2)
+// 					{
+// 						printf("=\n");
+// 						return (1);
+// 					}
+// 				}
+// 				if (map[i + 1])
+// 				{
+// 					if (map[i][j + 1] && ft_strlen(map[i + 1]) < (size_t)j + 2)
+// 					{
+// 						printf("+\n");
+// 						return (1);
+// 					}
+// 				}
+// 			}
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// 	return (0);
+// }
+
 int	check_map(char **map)
 {
 	int	i;
@@ -63,38 +113,8 @@ int	check_map(char **map)
 		j = 0;
 		while (map[i][j])
 		{
-			if (map[i][j] == ' ')
-			{
-				if (check_border(map, i, j))
-					return (1);
-			}
-			else if ((i == 0 || j == 0 || !map[i + 1] || !map[i][j + 1]))
-			{
-				if (map[i][j] != '1')
-				{
-					printf("+\n");
-					return (1);
-				}
-			}
-			else if (ft_strchr("0NSWE", map[i][j]) > 0)
-			{
-				if (i > 0)
-				{
-					if (map[i][j + 1] && ft_strlen(map[i - 1]) < (size_t)j + 2)
-					{
-						printf("=\n");
-						return (1);
-					}
-				}
-				if (map[i + 1])
-				{
-					if (map[i][j + 1] && ft_strlen(map[i + 1]) < (size_t)j + 2)
-					{
-						printf("+\n");
-						return (1);
-					}
-				}
-			}
+			if (check_cell(map, i, j))
+				return (1);
 			j++;
 		}
 		i++;

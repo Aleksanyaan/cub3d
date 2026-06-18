@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   distance.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pargev <pargev@student.42.fr>              +#+  +:+       +#+        */
+/*   By: zaleksan <zaleksan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/30 16:05:21 by zaleksan          #+#    #+#             */
-/*   Updated: 2026/02/21 14:15:36 by pargev           ###   ########.fr       */
+/*   Created: 2026/06/18 13:45:07 by zaleksan          #+#    #+#             */
+/*   Updated: 2026/06/18 13:48:09 by zaleksan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../includes/cub3d.h"
 
@@ -32,15 +31,15 @@ float	distance(float x, float y)
 	return (sqrt(x * x + y * y));
 }
 
-float	fixed_dist(float x1, float y1, float x2, float y2, t_game *game)
+float	fixed_dist(t_point p1, t_point p2, t_game *game)
 {
-	float delta_x;
-	float delta_y;
-	float angle;
-	float fix_dist;
+	float	delta_x;
+	float	delta_y;
+	float	angle;
+	float	fix_dist;
 
-	delta_x = x2 - x1;
-	delta_y = y2 - y1;
+	delta_x = p2.x - p1.x;
+	delta_y = p2.y - p1.y;
 	angle = atan2(delta_y, delta_x) - game->player->angle;
 	fix_dist = distance(delta_x, delta_y) * cos(angle);
 	return (fix_dist);
